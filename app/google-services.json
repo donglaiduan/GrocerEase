@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "157968519853",
+    "project_id": "grocerease-e2fa8",
+    "storage_bucket": "grocerease-e2fa8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157968519853:android:1fe4cbb4926e9d5cfeec24",
+        "android_client_info": {
+          "package_name": "com.cs407.grocerease"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6veESCQYzdpJCctVDoExVJYSIFBIuSKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
