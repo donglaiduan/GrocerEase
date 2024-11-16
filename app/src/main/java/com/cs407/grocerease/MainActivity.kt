@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,16 +17,43 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         val db = FirebaseFirestore.getInstance()
-        val blog2 = Blog(username = "jacob", description = "this is jacob's description", url = "jacoburl")
+        val blog2 = Blog(username = "null", description = "this is jacob's description", url = "jacoburl")
 
-        val blog3 = object {
-            var username = "jacob";
-            var description = "adfadfas";
-            var url = "fake.url"
-        }
+        val blog3 = Blog(
+            username = "brother",
+            description = "adfadfas",
+            url = "fake.url",
+            timestamp = System.currentTimeMillis()
+        )
 
-        db.collection("blogger").add(blog3)
-        db.collection("blog").add(blog2)
+
+
+
+        val email: String = "hello@gmail.com"
+        val password: String = "helloWorld"
+
+        signIn(email, password)
+//        db.collection("blogs").add(blog3)
+//        signOut()
+//        db.collection("blogs").add(blog2)
+
+
+        val blogList = mutableListOf<Blog>()
+
+        db.collection("blogs")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val blog = document.toObject(Blog::class.java)
+                    blogList.add(blog)
+                }
+                Log.d("Firestore", "Fetched ${blogList.size} blogs")
+                // Pass blogList to your RecyclerView adapter or display logic
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Error fetching blogs", e)
+            }
 
 
 
@@ -35,6 +64,58 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+
+
+
+
+val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+// Sign Up
+fun signUp(email: String, password: String) {
+    auth.createUserWithEmailAndPassword(email, password)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // User registered successfully
+                val user = auth.currentUser
+                println("User signed up: ${user?.email}")
+            } else {
+                // Sign-up failed
+                println("Sign-up error: ${task.exception?.message}")
+            }
+        }
+}
+
+// Sign In
+fun signIn(email: String, password: String) {
+    auth.signInWithEmailAndPassword(email, password)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // User signed in successfully
+                val user = auth.currentUser
+                println("User signed in: ${user?.email}")
+            } else {
+                // Sign-in failed
+                println("Sign-in error: ${task.exception?.message}")
+            }
+        }
+}
+
+fun signOut() {
+    auth.signOut()
+    println("User signed out successfully")
+}
+
+
+
+
+
+
+
+
+
+
+
 
 val db = FirebaseFirestore.getInstance()
 
@@ -66,3 +147,6 @@ fun getUserData(userId: String) {
             Log.e("Firestore", "Error getting document", e)
         }
 }
+
+
+
