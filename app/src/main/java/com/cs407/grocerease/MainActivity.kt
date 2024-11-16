@@ -14,14 +14,28 @@ class MainActivity : AppCompatActivity() {
         FirebaseFirestore.getInstance()
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        val newUser = User(userId = "123", name = "justin chiang", blogData = "justin's blog", age = 21)
-        Log.d("user", "Created user")
-        saveUserData(newUser)
-        Log.d("saved", "Saved user")
-        getUserData("12355")
-        Log.d("grabbed", "grab user")
-        getUserData("123")
-        Log.d("grabbed", "grab user")
+        val db = FirebaseFirestore.getInstance()
+//        val newUser = User(userId = "123", name = "justin chiang", blogData = "justin's blog", age = 21)
+        val blog1 = Blog(username = "jacob", description = "this is jacob's description", "jacoburl")
+        val blog2 = Blog(username = "jacob", description = "this is jacob's description", url = "jacoburl")
+
+        val blog3 = object {
+            var username = "jacob";
+            var description = "adfadfas";
+            var url = "fake.url"
+        }
+
+        db.collection("blogger").add(blog3)
+        db.collection("blog").add(blog2)
+
+
+//        Log.d("user", "Created user")
+//        saveUserData(newUser)
+//        Log.d("saved", "Saved user")
+//        getUserData("12355")
+//        Log.d("grabbed", "grab user")
+//        getUserData("123")
+//        Log.d("grabbed", "grab user")
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
