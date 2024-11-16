@@ -13,15 +13,15 @@
 
     <fragment
         android:id="@+id/navigation_list"
-        android:name="com.cs407.grocerease.ui.dashboard.DashboardFragment"
+        android:name="com.cs407.grocerease.ui.list.ListFragment"
         android:label="@string/title_list"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_list" />
 
     <fragment
         android:id="@+id/navigation_recs"
-        android:name="com.cs407.grocerease.ui.notifications.NotificationsFragment"
+        android:name="com.cs407.grocerease.ui.recommendations.RecommendationsFragment"
         android:label="@string/title_recs"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_recommendations" />
 
     <fragment
         android:id="@+id/navigation_map"
