@@ -1,10 +1,10 @@
-package com.cs407.grocerease.ui.notifications
+package com.cs407.grocerease.ui.recommendations
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class NotificationsViewModel : ViewModel() {
+class RecommendationsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is Recommendations Fragment"
