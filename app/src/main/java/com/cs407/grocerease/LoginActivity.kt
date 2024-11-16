@@ -29,6 +29,8 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
                 // Navigate to the next activity
                 val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("username", email)
+                intent.putExtra("password", password)
                 startActivity(intent)
                 finish()
             } else {
