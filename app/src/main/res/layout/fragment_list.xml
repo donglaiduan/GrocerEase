@@ -6,20 +6,92 @@
     android:layout_height="match_parent"
     tools:context=".ui.list.ListFragment">
 
-    <TextView
-        android:id="@+id/text_list"
+    <LinearLayout
+        android:id="@+id/TopOfListLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="48sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.418" />
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/GroceryListTitleText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="Grocery List"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:id="@+id/EditIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_edit_symbol" />
+
+        <Button
+            android:id="@+id/NewListButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New List" />
+    </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/GroceryListLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/TopOfListLayout">
+
+          <androidx.recyclerview.widget.RecyclerView
+              android:id="@+id/GroceryListRecycleView"
+              android:layout_width="347dp"
+              android:layout_height="wrap_content" />
+
+          <ImageView
+              android:id="@+id/AddItemButton"
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_marginEnd="8dp"
+              android:src="@drawable/plussymbol" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/RecentListLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/GroceryListLayout">
+
+        <TextView
+            android:id="@+id/RecentListText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Recent Lists"
+            android:textSize="20sp" />
+
+
+        <Button
+            android:id="@+id/AllListButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View All" />
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/RecentListLayout">
+
+    </HorizontalScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
