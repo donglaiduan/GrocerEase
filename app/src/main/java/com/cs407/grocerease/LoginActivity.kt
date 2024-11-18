@@ -7,6 +7,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 
 class LoginActivity : AppCompatActivity() {
 
@@ -19,22 +22,24 @@ class LoginActivity : AppCompatActivity() {
         val loginButton = findViewById<Button>(R.id.loginButton)
         val registerTextView = findViewById<TextView>(R.id.registerTextView)
 
+
+
         loginButton.setOnClickListener {
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
+
+
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
-            } else if (email == "user@example.com" && password == "password123") {
+            } else {
+                signUp("test@gmail.com", "test@gmail.com")
+                signIn(email, password)
                 Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
                 // Navigate to the next activity
                 val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("username", email)
-                intent.putExtra("password", password)
                 startActivity(intent)
                 finish()
-            } else {
-                Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -44,4 +49,36 @@ class LoginActivity : AppCompatActivity() {
             //startActivity(intent)
         }
     }
+}
+
+val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+// Sign Up
+fun signUp(email: String, password: String) {
+    auth.createUserWithEmailAndPassword(email, password)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // User registered successfully
+                val user = auth.currentUser
+                println("User signed up: ${user?.email}")
+            } else {
+                // Sign-up failed
+                println("Sign-up error: ${task.exception?.message}")
+            }
+        }
+}
+
+// Sign In
+fun signIn(email: String, password: String) {
+    auth.signInWithEmailAndPassword(email, password)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // User signed in successfully
+                val user = auth.currentUser
+                println("User signed in: ${user?.email}")
+            } else {
+                // Sign-in failed
+                println("Sign-in error: ${task.exception?.message}")
+            }
+        }
 }
