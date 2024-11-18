@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class RecommendationsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is Recommendations Fragment"
+        value = "Recipes List"
     }
     val text: LiveData<String> = _text
 }
