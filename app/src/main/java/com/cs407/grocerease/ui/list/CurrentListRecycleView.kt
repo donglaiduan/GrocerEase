@@ -27,7 +27,7 @@ class CurrentListRecycleView (
         val item = groceryItems[position]
         holder.itemName.text = item.name
         holder.deleteButton.setOnClickListener {
-            onDeleteClick(position)
+            onDeleteClick(holder.adapterPosition)
         }
     }
 

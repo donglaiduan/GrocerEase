@@ -2,6 +2,7 @@ package com.cs407.grocerease.ui.list
 
 import android.icu.text.Transliterator.Position
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,15 +53,19 @@ class ListFragment : Fragment() {
     }
 
     private fun addItem(itemName: String){
-        currentListItems.add(GroceryItem(itemName, 1))
+        val testItemName = "$itemName ${currentListItems.size + 1}"
+        currentListItems.add(GroceryItem(testItemName, 1))
         currentListRecycleView.notifyItemInserted(currentListItems.size - 1)
+        Log.d("ListFragment", "List size: ${currentListItems.size}")
     }
 
     private fun deleteItem(position: Int){
+        Log.d("position", "Position: ${position}")
         if (position >= 0 && position < currentListItems.size) {
             currentListItems.removeAt(position)
             currentListRecycleView.notifyItemRemoved(position)
         }
+        Log.d("ListFragment", "List size: ${currentListItems.size}")
     }
 
     override fun onDestroyView() {
