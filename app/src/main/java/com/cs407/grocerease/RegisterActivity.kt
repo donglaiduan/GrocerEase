@@ -9,20 +9,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 
-class LoginActivity : AppCompatActivity() {
-
+class RegisterActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_register)
 
-        val emailEditText = findViewById<EditText>(R.id.emailEditText)
-        val passwordEditText = findViewById<EditText>(R.id.passwordEditText)
-        val loginButton = findViewById<Button>(R.id.loginButton)
-        val registerTextView = findViewById<TextView>(R.id.registerTextView)
+        val emailEditText = findViewById<EditText>(R.id.emailEdit)
+        val passwordEditText = findViewById<EditText>(R.id.passwordEdit)
+        val registerButton = findViewById<Button>(R.id.registerButton)
+        val loginTextView = findViewById<TextView>(R.id.loginTextView)
 
 
 
-        loginButton.setOnClickListener {
+        registerButton.setOnClickListener {
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
@@ -31,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             } else {
-                signIn(email, password)
+                signUp(email, password)
                 Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
                 // Navigate to the next activity
                 val intent = Intent(this, MainActivity::class.java)
@@ -40,9 +39,9 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        registerTextView.setOnClickListener {
+        loginTextView.setOnClickListener {
             // Navigate to the registration screen
-            val intent = Intent(this, RegisterActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
     }
@@ -50,18 +49,17 @@ class LoginActivity : AppCompatActivity() {
 
 private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-
-// Sign In
-fun signIn(email: String, password: String) {
-    auth.signInWithEmailAndPassword(email, password)
+// Sign Up
+fun signUp(email: String, password: String) {
+    auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // User signed in successfully
+                // User registered successfully
                 val user = auth.currentUser
-                println("User signed in: ${user?.email}")
+                println("User signed up: ${user?.email}")
             } else {
-                // Sign-in failed
-                println("Sign-in error: ${task.exception?.message}")
+                // Sign-up failed
+                println("Sign-up error: ${task.exception?.message}")
             }
         }
 }
