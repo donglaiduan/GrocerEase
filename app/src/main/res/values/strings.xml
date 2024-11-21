@@ -12,4 +12,16 @@
     <string name="password_text">Password</string>
     <string name="email_text">Email</string>
     <string name="login_title">Grocerease</string>
+    <string-array name="item_amount_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
 </resources>

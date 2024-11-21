@@ -14,23 +14,17 @@
         android:padding="16dp"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <EditText
             android:id="@+id/GroceryListTitleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_weight="1"
+            android:hint="Grocery List"
             android:text="Grocery List"
+            android:background="@null"
+            android:singleLine="true"
             android:textSize="30sp"
-            android:textStyle="bold"/>
-
-        <ImageView
-            android:id="@+id/EditIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_edit_symbol" />
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/NewListButton"
@@ -103,7 +97,13 @@
         android:orientation="horizontal"
         android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@+id/RecentListLayout"
-        app:layout_constraintBottom_toBottomOf="parent">>
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:id="@+id/RecentListLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"/>
 
     </HorizontalScrollView>
 
