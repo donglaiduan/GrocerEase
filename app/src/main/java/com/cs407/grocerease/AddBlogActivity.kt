@@ -13,9 +13,9 @@ class AddBlogActivity : AppCompatActivity() {
         setContentView(R.layout.fragment_home)
         val addBlogButton = findViewById<Button>(R.id.addBlogButton)
 
-        addBlogButton.setOnClickListener{
-            Toast.makeText(this, "Add Blog Button Clicked!", Toast.LENGTH_SHORT).show()
-            Log.d("Blog Button", "Add Blog Button Clicked!")
-        }
+//        addBlogButton.setOnClickListener{
+//            Toast.makeText(this, "Add Blog Button Clicked!", Toast.LENGTH_SHORT).show()
+//            Log.d("Blog Button", "Add Blog Button Clicked!")
+//        }
     }
 }
