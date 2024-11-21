@@ -25,7 +25,7 @@ class CurrentListRecycleView (
 
     override fun onBindViewHolder(holder: GroceryItemsView, position: Int) {
         val item = groceryItems[position]
-        holder.itemName.text = item.name
+        holder.itemName.text = "(${item.amount}) ${item.name} "
         holder.deleteButton.setOnClickListener {
             onDeleteClick(holder.adapterPosition)
         }
