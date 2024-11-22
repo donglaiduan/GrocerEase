@@ -7,6 +7,7 @@
     import android.view.LayoutInflater
     import android.view.View
     import android.view.ViewGroup
+    import android.widget.Button
     import android.widget.TextView
     import android.widget.Toast
     import androidx.fragment.app.Fragment
@@ -257,6 +258,34 @@
             addListRecycleView.layoutManager = LinearLayoutManager(requireContext())
             addListRecycleView.adapter = addListAdapter
 
+            val searchButton = dialogView.findViewById<Button>(R.id.search_button)
+            searchButton.setOnClickListener {
+
+                val itemNameInput = dialogView.findViewById<android.widget.EditText>(R.id.itemNameInput)
+                val itemName = itemNameInput.text.toString().trim()
+
+                // use Nutrition Database to search for Item. If Item found, display results, and allow user to select
+                // result from search. then allow user to look at nutrition information, and select a result, and add some
+                // amount of that food to the list.
+                if(itemName.isNotEmpty()) {
+                    loadSearch(itemName, object : SearchCallback {
+                        override fun onResultsLoaded(results: MutableList<GroceryItem>) {
+                            // Use the results here
+                            if(results.isEmpty())
+                                Toast.makeText(context, "Food Not Found", Toast.LENGTH_SHORT).show()
+                            else {
+                                addListRecycleView.adapter = AddItemRecyleView(results)
+                                Log.d("Results", results.toString())
+                            }
+                        }
+                    })
+
+                } else {
+                    Toast.makeText(context, "Please Enter Food Name", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+
             val itemAmountInput = dialogView.findViewById<android.widget.Spinner>(R.id.itemAmountSpinner)
             val adapter = android.widget.ArrayAdapter(
                 requireContext(),
@@ -266,38 +295,14 @@
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             itemAmountInput.adapter = adapter
 
+
+
             val dialog = android.app.AlertDialog.Builder(requireContext())
                 .setTitle("Add Item")
                 .setView(dialogView)
-                .setPositiveButton("Add") {_, _ ->
-
-                    val itemNameInput = dialogView.findViewById<android.widget.EditText>(R.id.itemNameInput)
-
-                    val itemName = itemNameInput.text.toString().trim()
-                    val itemAmount = itemAmountInput.selectedItem.toString().toInt()
-
-
-                    // use Nutrition Database to search for Item. If Item found, display results, and allow user to select
-                    // result from search. then allow user to look at nutrition information, and select a result, and add some
-                    // amount of that food to the list.
-                    if(itemName.isNotEmpty()) {
-                        loadSearch(itemName, object : SearchCallback {
-                            override fun onResultsLoaded(results: MutableList<GroceryItem>) {
-                                // Use the results here
-                                if(results.isEmpty())
-                                    Toast.makeText(context, "Food Not Found", Toast.LENGTH_SHORT).show()
-                                else {
-                                    addListRecycleView.adapter = AddItemRecyleView(results)
-                                    Log.d("Results", results.toString())
-                                }
-                            }
-                        })
-
-                    } else {
-                        Toast.makeText(context, "Please Enter Food Name", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                .setNegativeButton(("Cancel"), null).create()
+                .setPositiveButton("Add",null)
+                .setNegativeButton(("Cancel"), null)
+                .create()
 
             dialog.show()
         }

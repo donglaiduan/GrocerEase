@@ -20,10 +20,16 @@
             android:hint="Enter item name"
             android:inputType="text" />
 
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/addItemRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="300dp"
             android:background="@color/grey"/>
 
         <Spinner

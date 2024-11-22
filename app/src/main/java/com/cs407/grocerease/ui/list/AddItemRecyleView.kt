@@ -23,7 +23,7 @@ class AddItemRecyleView (
 
     override fun onBindViewHolder(holder: GroceryItemsView, position: Int) {
         val item = groceryItems[position]
-        holder.itemName.text = "(${item.amount}) ${item.name} "
+        holder.itemName.text = item.description
     }
 
     override fun getItemCount(): Int = groceryItems.size
