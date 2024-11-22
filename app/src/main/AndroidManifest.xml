@@ -42,6 +42,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
+        <meta-data
+            android:name="com.cs407.grocerease.NUTRITION_API_KEY"
+            android:value="${NUTRITION_API_KEY}" />
     </application>
 
 </manifest>

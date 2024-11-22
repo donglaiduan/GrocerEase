@@ -1,21 +1,24 @@
     package com.cs407.grocerease.ui.list
 
     import android.content.Context
-    import android.icu.text.Transliterator.Position
+    import android.content.pm.PackageManager
     import android.os.Bundle
     import android.util.Log
     import android.view.LayoutInflater
     import android.view.View
     import android.view.ViewGroup
-    import android.widget.LinearLayout
     import android.widget.TextView
     import android.widget.Toast
     import androidx.fragment.app.Fragment
-    import androidx.lifecycle.ViewModelProvider
     import androidx.recyclerview.widget.LinearLayoutManager
+    import androidx.recyclerview.widget.RecyclerView
+    import com.android.volley.Request
+    import com.android.volley.toolbox.JsonObjectRequest
+    import com.android.volley.toolbox.Volley
     import com.cs407.grocerease.R
     import com.cs407.grocerease.databinding.FragmentListBinding
-    import java.time.temporal.TemporalAmount
+    import org.json.JSONObject
+
 
     class ListFragment : Fragment() {
 
@@ -71,7 +74,9 @@
             val listName = binding.GroceryListTitleText.text.toString()
             sharedPreferences.edit().putString(currentListNameShared, listName).apply()
 
-            val combinedList = currentListItems.joinToString(";") { "${it.name},${it.amount}" }
+            val combinedList = currentListItems.joinToString(";") { "${it.name},${it.description}," +
+                    "${it.calories},${it.carbs},${it.fat},${it.protein},${it.fiber},${it.potassium},${it.calcium},${it.iron}" +
+                    "${it.folate},${it.vitaminD},${it.amount},${it.unit}" }
             sharedPreferences.edit().putString(currentListItemsShared, combinedList).apply()
         }
 
@@ -90,10 +95,24 @@
                 currentListItems.clear()
                 items.forEach{
                     val split = it.split(",")
-                    if (split.size == 2) {
+                    if (split.size == 14) {
                         val itemName = split[0]
-                        val itemAmount = split[1].toInt() ?: 1
-                        currentListItems.add(GroceryItem(itemName, itemAmount))
+                        val itemDescription = split[1]
+                        val itemCalories = split[2].toDouble()
+                        val itemCarbs = split[3].toDouble()
+                        val itemFat = split[4].toDouble()
+                        val itemProtein = split[5].toDouble()
+                        val itemFiber = split[6].toDouble()
+                        val itemPotassium = split[7].toDouble()
+                        val itemCalcium = split[8].toDouble()
+                        val itemIron = split[9].toDouble()
+                        val itemFolate = split[10].toDouble()
+                        val itemVitaminD = split[11].toDouble()
+                        val itemAmount = split[12].toDouble()
+                        val itemUnit = split[13]
+                        currentListItems.add(GroceryItem(itemName, itemDescription, itemCalories, itemCarbs, itemFat,
+                            itemProtein, itemFiber, itemPotassium, itemCalcium, itemIron, itemFolate,
+                            itemVitaminD, itemAmount,itemUnit))
                     } else {
                         Log.w("ListFragment", "loadCurrentList split error")
                     }
@@ -106,7 +125,7 @@
             currentListItems.clear()
             currentListRecycleView.notifyDataSetChanged()
 
-            binding.GroceryListTitleText.setText("Grocery List")
+            binding.GroceryListTitleText.setText(getString(R.string.grocery_list))
             binding.RecentListLayout.visibility = View.VISIBLE
 
             saveList()
@@ -171,6 +190,11 @@
                 Toast.makeText(context, "List is empty", Toast.LENGTH_SHORT).show()
                 return
             }
+            if(binding.GroceryListTitleText.text.toString().isEmpty())
+            {
+                Toast.makeText(context, "Please Enter A Name for your List", Toast.LENGTH_SHORT).show()
+                return
+            }
 
             val sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
             val combinedList = sharedPreferences.getString(recentListsShared, "") ?: ""
@@ -206,8 +230,8 @@
         }
 
         //add item to current list
-        private fun addItem(itemName: String, itemAmount: Int){
-            currentListItems.add(GroceryItem(itemName, itemAmount))
+        private fun addItem(item: GroceryItem){
+            currentListItems.add(item)
             currentListRecycleView.notifyItemInserted(currentListItems.size - 1)
             saveList()
             Log.d("ListFragment", "List size: ${currentListItems.size}")
@@ -215,7 +239,7 @@
 
         //delete item from current list
         private fun deleteItem(position: Int){
-            Log.d("position", "Position: ${position}")
+            Log.d("position", "Position: $position")
             if (position >= 0 && position < currentListItems.size) {
                 currentListItems.removeAt(position)
                 currentListRecycleView.notifyItemRemoved(position)
@@ -227,6 +251,11 @@
         private fun addItemPopUp(){
 
             val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.adding_item_dialog, null)
+
+            val addListAdapter = AddItemRecyleView(mutableListOf())
+            val addListRecycleView = dialogView.findViewById<RecyclerView>(R.id.addItemRecyclerView)
+            addListRecycleView.layoutManager = LinearLayoutManager(requireContext())
+            addListRecycleView.adapter = addListAdapter
 
             val itemAmountInput = dialogView.findViewById<android.widget.Spinner>(R.id.itemAmountSpinner)
             val adapter = android.widget.ArrayAdapter(
@@ -247,15 +276,81 @@
                     val itemName = itemNameInput.text.toString().trim()
                     val itemAmount = itemAmountInput.selectedItem.toString().toInt()
 
+
+                    // use Nutrition Database to search for Item. If Item found, display results, and allow user to select
+                    // result from search. then allow user to look at nutrition information, and select a result, and add some
+                    // amount of that food to the list.
                     if(itemName.isNotEmpty()) {
-                        addItem(itemName, itemAmount)
+                        loadSearch(itemName, object : SearchCallback {
+                            override fun onResultsLoaded(results: MutableList<GroceryItem>) {
+                                // Use the results here
+                                if(results.isEmpty())
+                                    Toast.makeText(context, "Food Not Found", Toast.LENGTH_SHORT).show()
+                                else {
+                                    addListRecycleView.adapter = AddItemRecyleView(results)
+                                    Log.d("Results", results.toString())
+                                }
+                            }
+                        })
+
                     } else {
-                        Toast.makeText(context, "Item Name must be filled", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Please Enter Food Name", Toast.LENGTH_SHORT).show()
                     }
                 }
                 .setNegativeButton(("Cancel"), null).create()
 
             dialog.show()
+        }
+
+        interface SearchCallback {
+            fun onResultsLoaded(results: MutableList<GroceryItem>)
+        }
+
+        private fun loadSearch(searchItem: String, callback: SearchCallback) {
+            val volleyQueue = Volley.newRequestQueue(context)
+            val app = requireContext().packageManager.getApplicationInfo(
+                requireContext().packageName, PackageManager.GET_META_DATA
+            )
+            val bundle = app.metaData
+            val apiKey = bundle.getString("com.cs407.grocerease.NUTRITION_API_KEY")
+            val url = "https://api.nal.usda.gov/fdc/v1/foods/search?query=$searchItem&dataType=Foundation&pageSize=25&pageNumber=1&sortBy=dataType.keyword&sortOrder=asc&api_key=$apiKey"
+            val results = mutableListOf<GroceryItem>()
+
+            val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
+                { response ->
+                    val jsonObject = JSONObject(response.toString())
+                    val foods = jsonObject.getJSONArray("foods")
+                    for (i in 0 until foods.length()) {
+                        val resultGroceryItem = GroceryItem(
+                            searchItem, "", 0.0, 0.0, 0.0,
+                            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                            0.0, ""
+                        )
+                        val food = foods.getJSONObject(i)
+                        resultGroceryItem.description = food.getString("description")
+                        val nutrients = food.getJSONArray("foodNutrients")
+                        for (j in 0 until nutrients.length()) {
+                            val nutrient = nutrients.getJSONObject(j)
+                            when {
+                                nutrient.getString("nutrientName") == "Energy" && nutrient.getInt("nutrientId") == 1008 ->
+                                    resultGroceryItem.calories = nutrient.getDouble("value")
+                                nutrient.getString("nutrientName") == "Carbohydrate, by summation" && nutrient.getInt("nutrientId") == 1050 ->
+                                    resultGroceryItem.carbs = nutrient.getDouble("value")
+                                nutrient.getString("nutrientName") == "Total lipid (fat)" && nutrient.getInt("nutrientId") == 1004 ->
+                                    resultGroceryItem.fat = nutrient.getDouble("value")
+                                nutrient.getString("nutrientName") == "Protein" && nutrient.getInt("nutrientId") == 1003 ->
+                                    resultGroceryItem.protein = nutrient.getDouble("value")
+                            }
+                        }
+                        results.add(resultGroceryItem)
+                    }
+                    callback.onResultsLoaded(results)
+                },
+                { error ->
+                    Toast.makeText(context, "Response: %s".format(error.toString()), Toast.LENGTH_SHORT).show()
+                }
+            )
+            volleyQueue.add(jsonObjectRequest)
         }
 
 
