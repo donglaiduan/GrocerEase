@@ -285,7 +285,6 @@
                 }
             }
 
-
             val itemAmountInput = dialogView.findViewById<android.widget.Spinner>(R.id.itemAmountSpinner)
             val adapter = android.widget.ArrayAdapter(
                 requireContext(),
@@ -294,8 +293,6 @@
             )
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             itemAmountInput.adapter = adapter
-
-
 
             val dialog = android.app.AlertDialog.Builder(requireContext())
                 .setTitle("Add Item")
