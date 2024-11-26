@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
         addBlogButton.setOnClickListener {
             Log.d("Blog Button", "Add Blog Button Clicked!")
             val db = FirebaseFirestore.getInstance()
-            db.collection("blog")
+            db.collection("blogs")
                 .get()
                 .addOnSuccessListener { result ->
                     Log.d("get db", "get db")
