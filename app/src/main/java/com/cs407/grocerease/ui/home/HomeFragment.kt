@@ -51,13 +51,10 @@ class HomeFragment : Fragment() {
                     // Iterate through the documents in the collection
                     for (document in result) {
                         val blog = document.toObject(Blog::class.java)
-                        Log.d("Blog Fetch", "Blog: $blog")
-                        // Optionally, show a Toast or update the UI
-                        Toast.makeText(
-                            requireContext(),
-                            "Fetched blog: ${blog.description}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Log.d("blog user", blog.username)
+                        Log.d("blog descrip", blog.description)
+                        Log.d("blog url", blog.url)
+                        Log.d("blog time", blog.timestamp.toString())
                     }
                 }
                 .addOnFailureListener { exception ->
