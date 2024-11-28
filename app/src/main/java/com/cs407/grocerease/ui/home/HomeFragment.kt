@@ -19,6 +19,7 @@ import com.cs407.grocerease.databinding.FragmentHomeBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeFragment : Fragment() {
+    private val blogList = mutableListOf<Blog>()
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -42,9 +43,9 @@ class HomeFragment : Fragment() {
             textView.text = it
         }
         val addBlogButton = root.findViewById<Button>(R.id.addBlogButton)
-        val addBlog = root.findViewById<ImageView>(R.id.addBlog)
 
         addBlogButton.setOnClickListener {
+            addBlogPopup()
             Log.d("Blog Button", "Add Blog Button Clicked!")
             val db = FirebaseFirestore.getInstance()
             db.collection("blogs")
@@ -68,9 +69,13 @@ class HomeFragment : Fragment() {
                 }
         }
 
-        addBlog.setOnClickListener {
-            addBlogPopup()
-        }
+        fetchBlogs()
+
+        Log.d("blog fetching", blogList.size.toString())
+
+        // Populate the view with blog data
+        populateBlogView()
+
 
         return root
     }
@@ -110,5 +115,43 @@ class HomeFragment : Fragment() {
             dialog.dismiss()
         }
 
+    }
+
+    private fun fetchBlogs() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("blogs")
+            .get()
+            .addOnSuccessListener { result ->
+                blogList.clear()
+                for (document in result) {
+                    Log.d("***", document.toString())
+                    val blog = document.toObject(Blog::class.java)
+                    blogList.add(blog)
+                }
+                populateBlogView()
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Blog Fetch", "Error fetching blogs", exception)
+                Toast.makeText(requireContext(), "Failed to fetch blogs", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun populateBlogView() {
+        // Clear any existing blog views
+        binding.blogContainer.removeAllViews()
+
+        // Inflate and add blog views
+        for (blog in blogList) {
+            Log.d("hit", "hit")
+            val blogView = layoutInflater.inflate(R.layout.blog_item, binding.blogContainer, false)
+//            blogView.findViewById<TextView>(R.id.blogTitle).text = blog.title
+            blogView.findViewById<TextView>(R.id.blogDescription).text = blog.description
+            blogView.findViewById<TextView>(R.id.blogUsername).text = blog.username
+            blogView.findViewById<TextView>(R.id.blogTimestamp).text = blog.timestamp.toString()
+//            Glide.with(requireContext())
+//                .load(blog.url)
+//                .into(blogView.findViewById(R.id.blogImage))
+            binding.blogContainer.addView(blogView)
+        }
     }
 }
