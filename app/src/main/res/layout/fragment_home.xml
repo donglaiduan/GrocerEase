@@ -21,6 +21,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/addBlog"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="516dp"
+        android:contentDescription="Add Item Button"
+        android:src="@drawable/plussymbol"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <Button
         android:id="@+id/addBlogButton"
         android:layout_width="246dp"
