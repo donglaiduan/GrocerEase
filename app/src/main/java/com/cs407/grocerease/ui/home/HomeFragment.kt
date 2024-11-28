@@ -1,11 +1,14 @@
 package com.cs407.grocerease.ui.home
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -16,6 +19,7 @@ import com.cs407.grocerease.databinding.FragmentHomeBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeFragment : Fragment() {
+    private val blogList = mutableListOf<Blog>()
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -41,6 +45,7 @@ class HomeFragment : Fragment() {
         val addBlogButton = root.findViewById<Button>(R.id.addBlogButton)
 
         addBlogButton.setOnClickListener {
+            addBlogPopup()
             Log.d("Blog Button", "Add Blog Button Clicked!")
             val db = FirebaseFirestore.getInstance()
             db.collection("blogs")
@@ -64,11 +69,92 @@ class HomeFragment : Fragment() {
                 }
         }
 
+        fetchBlogs()
+
+
+
+        // Populate the view with blog data
+        populateBlogView()
+
+        Log.d("blog fetching", blogList.size.toString())
+
+
+
         return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun addBlogPopup() {
+        val dialogView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.adding_blog_dialog, null)
+        val titleEditText = dialogView.findViewById<EditText>(R.id.title_edit_text)
+        val bodyEditText = dialogView.findViewById<EditText>(R.id.body_edit_text)
+        val imageView = dialogView.findViewById<ImageView>(R.id.image_view)
+        val cancelButton = dialogView.findViewById<Button>(R.id.cancel_button)
+        val uploadButton = dialogView.findViewById<Button>(R.id.upload_button)
+
+        val builder = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(true)
+
+        val dialog = builder.create()
+        dialog.show()
+
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        uploadButton.setOnClickListener {
+            val title = titleEditText.text.toString()
+            val body = bodyEditText.text.toString()
+
+            // Here, you can add your logic to save the blog post to Firestore
+
+
+            dialog.dismiss()
+        }
+
+    }
+
+    private fun fetchBlogs() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("blogs")
+            .get()
+            .addOnSuccessListener { result ->
+                blogList.clear()
+                for (document in result) {
+                    Log.d("***", document.toString())
+                    val blog = document.toObject(Blog::class.java)
+                    blogList.add(blog)
+                }
+                populateBlogView()
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Blog Fetch", "Error fetching blogs", exception)
+                Toast.makeText(requireContext(), "Failed to fetch blogs", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun populateBlogView() {
+        // Clear any existing blog views
+//        binding.blogContainer.removeAllViews()
+
+        // Inflate and add blog views
+        for (blog in blogList) {
+            Log.d("hit", "hit")
+            val blogView = layoutInflater.inflate(R.layout.blog_item, binding.blogContainer, false)
+//            blogView.findViewById<TextView>(R.id.blogTitle).text = blog.title
+            blogView.findViewById<TextView>(R.id.blogDescription).text = blog.description
+            blogView.findViewById<TextView>(R.id.blogUsername).text = blog.username
+            blogView.findViewById<TextView>(R.id.blogTimestamp).text = blog.timestamp.toString()
+//            Glide.with(requireContext())
+//                .load(blog.url)
+//                .into(blogView.findViewById(R.id.blogImage))
+            binding.blogContainer.addView(blogView)
+        }
     }
 }
