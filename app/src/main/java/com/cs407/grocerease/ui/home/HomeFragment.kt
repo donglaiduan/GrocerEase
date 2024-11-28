@@ -71,10 +71,13 @@ class HomeFragment : Fragment() {
 
         fetchBlogs()
 
-        Log.d("blog fetching", blogList.size.toString())
+
 
         // Populate the view with blog data
         populateBlogView()
+
+        Log.d("blog fetching", blogList.size.toString())
+
 
 
         return root
@@ -138,7 +141,7 @@ class HomeFragment : Fragment() {
 
     private fun populateBlogView() {
         // Clear any existing blog views
-        binding.blogContainer.removeAllViews()
+//        binding.blogContainer.removeAllViews()
 
         // Inflate and add blog views
         for (blog in blogList) {
