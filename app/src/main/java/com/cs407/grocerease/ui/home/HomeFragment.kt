@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.cs407.grocerease.Blog
 import com.cs407.grocerease.R
 import com.cs407.grocerease.databinding.FragmentHomeBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.oAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeFragment : Fragment() {
@@ -56,7 +58,7 @@ class HomeFragment : Fragment() {
                     // Iterate through the documents in the collection
                     for (document in result) {
                         val blog = document.toObject(Blog::class.java)
-                        Log.d("blog user", blog.username)
+                        Log.d("blog user", blog.username.toString())
                         Log.d("blog descrip", blog.description)
                         Log.d("blog url", blog.url)
                         Log.d("blog time", blog.timestamp.toString())
@@ -111,8 +113,29 @@ class HomeFragment : Fragment() {
         uploadButton.setOnClickListener {
             val title = titleEditText.text.toString()
             val body = bodyEditText.text.toString()
+            val currentUser = FirebaseAuth.getInstance().currentUser
 
-            // Here, you can add your logic to save the blog post to Firestore
+            val blog = Blog(
+                username = currentUser?.displayName,
+                title = title,
+                description = body, url = "",
+                timestamp = System.currentTimeMillis()
+            )
+
+            // should add this code to update display name for users
+//            val profileUpdates = UserProfileChangeRequest.Builder()
+//                .setDisplayName("Your Username")
+//                .build()
+//
+//            FirebaseAuth.getInstance().currentUser?.updateProfile(profileUpdates)
+//                ?.addOnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        Log.d("Update Profile", "User profile updated.")
+//                    }
+//                }
+
+            val db = FirebaseFirestore.getInstance()
+            db.collection("blogs").add(blog)
 
 
             dialog.dismiss()
