@@ -48,12 +48,12 @@
               app:layout_constraintTop_toTopOf="parent"
               app:layout_constraintBottom_toBottomOf="parent"
               app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintEnd_toStartOf="@id/AddItemButton"
+              app:layout_constraintEnd_toStartOf="@id/AddItemPopup"
               android:scrollbars="vertical" />
 
 
         <ImageView
-            android:id="@+id/AddItemButton"
+            android:id="@+id/AddItemPopup"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:contentDescription="Add Item Button"

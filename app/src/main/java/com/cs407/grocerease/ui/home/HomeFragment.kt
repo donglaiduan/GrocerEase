@@ -44,7 +44,7 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
-        val addBlogButton = root.findViewById<Button>(R.id.addBlogButton)
+        val addBlogButton = root.findViewById<ImageView>(R.id.addBlogButton)
 
         addBlogButton.setOnClickListener {
             addBlogPopup()

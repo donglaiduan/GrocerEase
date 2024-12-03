@@ -24,6 +24,7 @@
             android:id="@+id/search_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
             android:text="Search" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -32,11 +33,19 @@
             android:layout_height="300dp"
             android:background="@color/grey"/>
 
-        <Spinner
-            android:id="@+id/itemAmountSpinner"
+        <EditText
+            android:id="@+id/itemAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp" />
+            android:hint="Amount"
+            android:inputType="numberDecimal"
+            android:layout_marginVertical="15dp" />
+
+        <Button
+            android:id="@+id/addItemButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/addItemText" />
     </LinearLayout>
 
 

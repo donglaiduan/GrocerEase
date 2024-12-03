@@ -55,7 +55,7 @@
             loadRecentLists()
 
             //add item to current list
-            binding.AddItemButton.setOnClickListener {
+            binding.AddItemPopup.setOnClickListener {
                 addItemPopUp()
             }
 
@@ -75,9 +75,9 @@
             val listName = binding.GroceryListTitleText.text.toString()
             sharedPreferences.edit().putString(currentListNameShared, listName).apply()
 
-            val combinedList = currentListItems.joinToString(";") { "${it.name},${it.description}," +
-                    "${it.calories},${it.carbs},${it.fat},${it.protein},${it.fiber},${it.potassium},${it.calcium},${it.iron}" +
-                    "${it.folate},${it.vitaminD},${it.amount},${it.unit}" }
+            val combinedList = currentListItems.joinToString(";") { "${it.name}:${it.description}:" +
+                    "${it.calories}:${it.carbs}:${it.fat}:${it.protein}:${it.fiber}:${it.potassium}:${it.calcium}:${it.iron}:" +
+                    "${it.folate}:${it.vitaminD}:${it.amount}:${it.unit}" }
             sharedPreferences.edit().putString(currentListItemsShared, combinedList).apply()
         }
 
@@ -95,7 +95,7 @@
                 val items = combinedList.split(";").filter { it.isNotEmpty() }
                 currentListItems.clear()
                 items.forEach{
-                    val split = it.split(",")
+                    val split = it.split(":")
                     if (split.size == 14) {
                         val itemName = split[0]
                         val itemDescription = split[1]
@@ -231,7 +231,8 @@
         }
 
         //add item to current list
-        private fun addItem(item: GroceryItem){
+        private fun addItem(item: GroceryItem, itemAmountInput: Double){
+            item.amount = itemAmountInput
             currentListItems.add(item)
             currentListRecycleView.notifyItemInserted(currentListItems.size - 1)
             saveList()
@@ -285,22 +286,29 @@
                 }
             }
 
-            val itemAmountInput = dialogView.findViewById<android.widget.Spinner>(R.id.itemAmountSpinner)
-            val adapter = android.widget.ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                resources.getStringArray(R.array.item_amount_array)
-            )
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            itemAmountInput.adapter = adapter
+            val itemAmountInput = dialogView.findViewById<TextView>(R.id.itemAmount)
 
+            val addButton = dialogView.findViewById<Button>(R.id.addItemButton)
+            addButton.setOnClickListener {
+                val selected = (addListRecycleView.adapter as AddItemRecyleView).getSelectedItem()
+                val amount = itemAmountInput.text.toString().toDoubleOrNull()
+                Log.d("Item", selected.toString())
+                if(selected != null && amount != null && !amount.isNaN()){
+                    addItem(selected,amount)
+                    Toast.makeText(context, "Item Added!", Toast.LENGTH_SHORT).show()
+                    addListAdapter.notifyDataSetChanged()
+                }
+                if (selected == null)
+                    Toast.makeText(context, "Error, No Item Selected", Toast.LENGTH_SHORT).show()
+                if (amount == null || amount.isNaN())
+                    Toast.makeText(context, "Error, Amont is Not a Number", Toast.LENGTH_SHORT).show()
+
+            }
             val dialog = android.app.AlertDialog.Builder(requireContext())
                 .setTitle("Add Item")
                 .setView(dialogView)
-                .setPositiveButton("Add",null)
-                .setNegativeButton(("Cancel"), null)
+                .setNegativeButton(("Done"), null)
                 .create()
-
             dialog.show()
         }
 
@@ -315,7 +323,7 @@
             )
             val bundle = app.metaData
             val apiKey = bundle.getString("com.cs407.grocerease.NUTRITION_API_KEY")
-            val url = "https://api.nal.usda.gov/fdc/v1/foods/search?query=$searchItem&dataType=Foundation&pageSize=25&pageNumber=1&sortBy=dataType.keyword&sortOrder=asc&api_key=$apiKey"
+            val url = "https://api.nal.usda.gov/fdc/v1/foods/search?query=$searchItem&dataType=Survey (FNDDS)&pageSize=100&pageNumber=1&sortBy=dataType.keyword&sortOrder=asc&api_key=$apiKey"
             val results = mutableListOf<GroceryItem>()
 
             val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
