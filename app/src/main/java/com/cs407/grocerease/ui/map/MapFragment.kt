@@ -47,28 +47,139 @@ class MapFragment : Fragment() {
             val madisonCamPosition = (LatLng(43.0722, -89.4008))
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(madisonCamPosition,14.5f))
 
+            //set map marker listener
+            map.setOnMarkerClickListener { marker ->
+
+                marker.showInfoWindow()
+
+                val storeInfo = StoreInfoPopup.newInstance(
+                    marker.title ?: "Store Name",
+                    marker.snippet ?: "Store Info"
+                )
+                storeInfo.show(parentFragmentManager, StoreInfoPopup.TAG)
+                true
+            }
+
             //Fresh Market
-            setLocationMarker(map,"Fresh Market",
-                "Address: 703 University Ave, Madison, WI 53715\n" +
-                        "$$\n" +
+            setLocationMarker(
+                googleMap = map,
+                destinationName = "Fresh Market",
+                destinationDescription = "Address: 703 University Ave, Madison, WI 53715\n" +
+                        "$$$\n" +
                         "Located near the center of Madison, this grocery store is " +
-                        "very convenient for most students living in the south east " +
-                        "area of campus.",
-                LatLng(43.07303410641694, -89.39772010890856))
+                        "very convenient for most students. Fresh has a large selection " +
+                        "of high quality and organic items which increases its pricing. " +
+                        "Fresh also supplies fresh meat and ready made meals",
+                destination = LatLng(43.07303410641694, -89.39772010890856))
             //Trader Joes
+            setLocationMarker(
+                googleMap = map,
+                destinationName = "Trader Joe's",
+                destinationDescription = "Address: 1810 Monroe St, Madison, WI 53711\n" +
+                        "$$\n" +
+                        "Located southwest of campus, Trader Joe's is known for its " +
+                        "wide variety of affordable ingredients, snacks, and ready-made " +
+                        "meals.",
+                destination = LatLng(43.06530796820925, -89.41766107417776))
 
             //Capital Centre Market
+            setLocationMarker(
+                googleMap = map,
+                destinationName = "Capital Centre Market",
+                destinationDescription = "Address: 111 N Broom St, Madison, WI 53703\n" +
+                        "$$\n" +
+                        "Located near the capital, Capital Centre Market is a small " +
+                        "family-run grocery store with offering produce, meat, and a deli " +
+                        "at an affordable price.",
+                destination = LatLng(43.07277509306866, -89.39002591639587))
 
             //Target
+            setLocationMarker(
+                googleMap = map,
+                destinationName = "Target",
+                destinationDescription = "Address: 610 State St, Madison, WI 53703\n" +
+                        "$$\n" +
+                        "Located on state street, Target has a large selection of instant meals " +
+                        "and snacks at an affordable price. Target also has a small selection of " +
+                        "ingredients and frozen foods along with household goods and electronics.",
+                destination = LatLng(43.07518772160185, -89.39607681824377))
 
             //Walgreens
+            setLocationMarker(
+                googleMap = map,
+                destinationName = "Walgreens",
+                destinationDescription = "Address: 311 E Campus Mall, Madison, WI 53715\n" +
+                        "$$\n" +
+                        "Located in the middle of campus, Walgreen has many quick-grab " +
+                        "groceries with a focus on snacks and instant foods. Walgreens is" +
+                        "open until midnight and also provides a pharmacy.",
+                destination = LatLng(43.07245969228958, -89.39856426057304))
 
             //KwikTrip
+            setLocationMarker(
+                googleMap = map,
+                destinationName = "Kwik Trip",
+                destinationDescription = "Address: 1421 Monroe St, Madison, WI 53711\n" +
+                        "$\n" +
+                        "Located southwest of campus,Kwik Trip is a convenience store " +
+                        "that not only provides snacks, but fresh food including sandwhiches, " +
+                        "salads, and bakery items along with some groceries.",
+                destination = LatLng(43.069961781760966, -89.40929217221888))
 
-            //
+            //Asian Midway Foods
+            setLocationMarker(
+                googleMap = map,
+                destinationName = "Asian Midway Foods",
+                destinationDescription = "Address: 301 S Park St, Madison, WI 53715\n" +
+                        "$$\n" +
+                        "Located south of campus, Asian Midway Foods has a focus on east " +
+                        "Asian cuisine and has traditional ingredients, fresh produce, and " +
+                        "authentic snacks.",
+                destination = LatLng(43.064092429098295, -89.4003252587596))
 
+            //J&P Fresh Market
+            setLocationMarker(
+                googleMap = map,
+                destinationName = "J&P Fresh Market",
+                destinationDescription = "Address: 346 State St, Madison, WI 53703\n" +
+                        "$$\n" +
+                        "Located at the end of state street, J&P is a small family-owned " +
+                        "market with high-quality produce and meats. J&P has a strong focus" +
+                        "on east items and snacks.",
+                destination = LatLng(43.0751807110881, -89.39133827758543))
 
+            //Pinkus Market
+            setLocationMarker(
+                googleMap = map,
+                destinationName = "Pinkus Market",
+                destinationDescription = "Address: 673 State St, Madison, WI 53703\n" +
+                        "$$\n" +
+                        "Located on state street, Pinkus Market is a small conveince store " +
+                        "with a collection of essential groceries making it a quick and easy " +
+                        "stop when in a rush.",
+                destination = LatLng(43.07483094992227, -89.39718234164462))
 
+            //Regent Mart
+            setLocationMarker(
+                googleMap = map,
+                destinationName = "Regent Mart & Cafe",
+                destinationDescription = "Address: 1401 Regent St, Madison, WI 53711\n" +
+                        "$$\n" +
+                        "Located south of campus, Regent Mart is a convenience store with" +
+                        "a decent collection of groceries. Regent Mart has a strong selection of " +
+                        "Indian goods and snacks along with a hot deli.",
+                destination = LatLng(43.06750437858409, -89.40929200194383))
+
+            //Pick 'n Save
+            setLocationMarker(
+                googleMap = map,
+                destinationName = "Pick 'n Save",
+                destinationDescription = "Address: 1312 S Park St, Madison, WI 53715\n" +
+                        "$\n" +
+                        "Located south of campus, Pick 'n Save is a full suparmarket with a " +
+                        "wide variety of groceries and household items. Although a bit far, it " +
+                        "has affordable prices and weakly deals.",
+                destination = LatLng(43.05247737233041, -89.39591557577499))
 
         }
         return root

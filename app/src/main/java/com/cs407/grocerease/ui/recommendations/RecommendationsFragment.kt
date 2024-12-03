@@ -21,12 +21,12 @@ class RecommendationsFragment : Fragment() {
         _binding = FragmentRecommendationsBinding.inflate(inflater, container, false)
 
         // Handle button clicks
-        binding.buttonRecipes.setOnClickListener {
+        binding.fnRecipesButton.setOnClickListener {
             // Navigate to RecipesFragment using NavController
             findNavController().navigate(R.id.recipesFragment)
         }
 
-        binding.buttonNutrition.setOnClickListener {
+        binding.frNutritionButton.setOnClickListener {
             // Navigate to NutritionFragment using NavController
             findNavController().navigate(R.id.nutritionFragment)
         }
