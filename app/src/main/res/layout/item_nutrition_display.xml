@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/description_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description: " />
+
+        <TextView
+            android:id="@+id/calories_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calories: " />
+
+        <TextView
+            android:id="@+id/carbs_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Carbs: " />
+
+        <TextView
+            android:id="@+id/fat_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fat: " />
+
+        <TextView
+            android:id="@+id/protein_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Protein: " />
+
+        <TextView
+            android:id="@+id/fiber_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fiber: " />
+
+        <TextView
+            android:id="@+id/potassium_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Potassium: " />
+
+        <TextView
+            android:id="@+id/calcium_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calciium: " />
+
+        <TextView
+            android:id="@+id/iron_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Iron: " />
+
+        <TextView
+            android:id="@+id/folate_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Folate: " />
+
+        <TextView
+            android:id="@+id/vitaminD_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vitamin D: " />
+
+    </LinearLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

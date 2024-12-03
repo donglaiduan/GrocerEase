@@ -23,6 +23,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".RegisterActivity"
+            android:exported="true"
+            android:label="@string/login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name">
@@ -33,6 +42,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
+        <meta-data
+            android:name="com.cs407.grocerease.NUTRITION_API_KEY"
+            android:value="${NUTRITION_API_KEY}" />
     </application>
 
 </manifest>
