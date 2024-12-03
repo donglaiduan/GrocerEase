@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.recommendations.NutritionFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Button Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <!-- Recipes Button -->
+            <Button
+                android:id="@+id/fnRecipesButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Recipes" />
+
+            <!-- Nutrition Button -->
+            <Button
+                android:id="@+id/fnNutritionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Nutrition" />
+        </LinearLayout>
+
+        <!-- Nutrition Breakdown Title -->
+        <TextView
+            android:id="@+id/nutritionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Nutrition Breakdown"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Scrollable List -->
+        <ScrollView
+            android:id="@+id/nutritionScrollView"
+            android:layout_width="365dp"
+            android:layout_height="326dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Example Nutrition Item 1 -->
+                <TextView
+                    android:id="@+id/nutritionItem1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="• Calories: 200"
+                    android:textSize="16sp" />
+
+                <!-- Example Nutrition Item 2 -->
+                <TextView
+                    android:id="@+id/nutritionItem2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="• Protein: 10g"
+                    android:textSize="16sp" />
+
+                <!-- Example Nutrition Item 3 -->
+                <TextView
+                    android:id="@+id/nutritionItem3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="• Carbohydrates: 30g"
+                    android:textSize="16sp" />
+
+                <!-- Add more nutrition items here -->
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</FrameLayout>

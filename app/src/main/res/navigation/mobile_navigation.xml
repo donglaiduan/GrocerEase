@@ -28,4 +28,15 @@
         android:name="com.cs407.grocerease.ui.map.MapFragment"
         android:label="@string/title_map"
         tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/recipesFragment"
+        android:name="com.cs407.grocerease.ui.recommendations.RecipesFragment"
+        android:label="RecipesFragment" />
+
+    <fragment
+        android:id="@+id/nutritionFragment"
+        android:name="com.cs407.grocerease.ui.recommendations.NutritionFragment"
+        android:label="NutritionFragment" />
+
 </navigation>

@@ -7,27 +7,22 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.cs407.grocerease.R
-import com.cs407.grocerease.databinding.FragmentRecommendationsBinding
+import com.cs407.grocerease.databinding.FragmentRecipesBinding
 
-class RecommendationsFragment : Fragment() {
+class RecipesFragment : Fragment() {
 
-    private var _binding: FragmentRecommendationsBinding? = null
+    private var _binding: FragmentRecipesBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRecommendationsBinding.inflate(inflater, container, false)
+        _binding = FragmentRecipesBinding.inflate(inflater, container, false)
 
-        // Handle button clicks
-        binding.buttonRecipes.setOnClickListener {
-            // Navigate to RecipesFragment using NavController
-            findNavController().navigate(R.id.recipesFragment)
-        }
-
-        binding.buttonNutrition.setOnClickListener {
-            // Navigate to NutritionFragment using NavController
+        // Set up listener for the button
+        binding.frNutritionButton.setOnClickListener {
+            // Use NavController to navigate to NutritionFragment
             findNavController().navigate(R.id.nutritionFragment)
         }
 
