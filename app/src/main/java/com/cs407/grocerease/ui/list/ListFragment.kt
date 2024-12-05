@@ -254,7 +254,7 @@
 
             val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.adding_item_dialog, null)
 
-            val addListAdapter = AddItemRecyleView(mutableListOf())
+            val addListAdapter = AddItemRecycleView(mutableListOf())
             val addListRecycleView = dialogView.findViewById<RecyclerView>(R.id.addItemRecyclerView)
             addListRecycleView.layoutManager = LinearLayoutManager(requireContext())
             addListRecycleView.adapter = addListAdapter
@@ -275,7 +275,7 @@
                             if(results.isEmpty())
                                 Toast.makeText(context, "Food Not Found", Toast.LENGTH_SHORT).show()
                             else {
-                                addListRecycleView.adapter = AddItemRecyleView(results)
+                                addListRecycleView.adapter = AddItemRecycleView(results)
                                 Log.d("Results", results.toString())
                             }
                         }
@@ -290,7 +290,7 @@
 
             val addButton = dialogView.findViewById<Button>(R.id.addItemButton)
             addButton.setOnClickListener {
-                val selected = (addListRecycleView.adapter as AddItemRecyleView).getSelectedItem()
+                val selected = (addListRecycleView.adapter as AddItemRecycleView).getSelectedItem()
                 val amount = itemAmountInput.text.toString().toDoubleOrNull()
                 Log.d("Item", selected.toString())
                 if(selected != null && amount != null && !amount.isNaN()){

@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cs407.grocerease.R
 import kotlinx.coroutines.selects.select
 
-class AddItemRecyleView (
+class AddItemRecycleView (
     val groceryItems: MutableList<GroceryItem>,
-) : RecyclerView.Adapter<AddItemRecyleView.GroceryItemsView>() {
+) : RecyclerView.Adapter<AddItemRecycleView.GroceryItemsView>() {
 
     private var selectedPosition = -1
 
