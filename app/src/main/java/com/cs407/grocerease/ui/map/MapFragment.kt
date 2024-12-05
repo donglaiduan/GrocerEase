@@ -121,8 +121,8 @@ class MapFragment : Fragment() {
                 destinationName = "Kwik Trip",
                 destinationDescription = "Address: 1421 Monroe St, Madison, WI 53711\n" +
                         "$\n" +
-                        "Located southwest of campus,Kwik Trip is a convenience store " +
-                        "that not only provides snacks, but fresh food including sandwhiches, " +
+                        "Located southwest of campus, Kwik Trip is a convenience store " +
+                        "that not only provides snacks, but fresh food including sandwiches, " +
                         "salads, and bakery items along with some groceries.",
                 destination = LatLng(43.069961781760966, -89.40929217221888))
 
@@ -154,7 +154,7 @@ class MapFragment : Fragment() {
                 destinationName = "Pinkus Market",
                 destinationDescription = "Address: 673 State St, Madison, WI 53703\n" +
                         "$$\n" +
-                        "Located on state street, Pinkus Market is a small conveince store " +
+                        "Located on state street, Pinkus Market is a small convenience store " +
                         "with a collection of essential groceries making it a quick and easy " +
                         "stop when in a rush.",
                 destination = LatLng(43.07483094992227, -89.39718234164462))
