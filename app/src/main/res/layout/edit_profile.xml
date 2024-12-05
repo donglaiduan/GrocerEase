@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:hint="Example@gmail.com"
         android:inputType="textEmailAddress"
-        android:enabled="false"
+        android:enabled="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvEmail" />
@@ -59,7 +59,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="PositivePanda44"
-        android:enabled="false"
+        android:enabled="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvUsername" />
@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:hint="**********"
         android:inputType="textPassword"
-        android:enabled="false"
+        android:enabled="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvPassword" />

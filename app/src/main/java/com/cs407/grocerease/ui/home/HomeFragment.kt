@@ -1,6 +1,8 @@
 package com.cs407.grocerease.ui.home
 
+import AccountActivity
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,6 +47,21 @@ class HomeFragment : Fragment() {
             textView.text = it
         }
         val addBlogButton = root.findViewById<ImageView>(R.id.addBlogButton)
+        val editProfile = root.findViewById<ImageView>(R.id.editProfile)
+
+        editProfile.setOnClickListener {
+//            val intent = Intent(requireContext(), AccountActivity::class.java)
+//            startActivity(intent)
+
+            val inflater = LayoutInflater.from(requireContext())
+            val editProfileView = inflater.inflate(R.layout.edit_profile, binding.root, false)
+
+            // Clear the current content
+            binding.root.removeAllViews()
+
+            // Add the new view (edit profile layout)
+            binding.root.addView(editProfileView)
+        }
 
         addBlogButton.setOnClickListener {
             addBlogPopup()
@@ -171,6 +188,7 @@ class HomeFragment : Fragment() {
             Log.d("hit", "hit")
             val blogView = layoutInflater.inflate(R.layout.blog_item, binding.blogContainer, false)
 //            blogView.findViewById<TextView>(R.id.blogTitle).text = blog.title
+            blogView.findViewById<TextView>(R.id.blogTitle).text = blog.title
             blogView.findViewById<TextView>(R.id.blogDescription).text = blog.description
             blogView.findViewById<TextView>(R.id.blogUsername).text = blog.username
             blogView.findViewById<TextView>(R.id.blogTimestamp).text = blog.timestamp.toString()
