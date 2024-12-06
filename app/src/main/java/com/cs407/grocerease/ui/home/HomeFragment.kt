@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.cs407.grocerease.Blog
 import com.cs407.grocerease.R
 import com.cs407.grocerease.databinding.FragmentHomeBinding
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeFragment : Fragment() {
     private val blogList = mutableListOf<Blog>()
+    private lateinit var blogAdapter: BlogAdapter
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -46,13 +48,16 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
+
+        // Initialize the RecyclerView and adapter
+        blogAdapter = BlogAdapter(blogList)
+        binding.blogContainer.layoutManager = LinearLayoutManager(requireContext())
+        binding.blogContainer.adapter = blogAdapter
+
         val addBlogButton = root.findViewById<ImageView>(R.id.addBlogButton)
         val editProfile = root.findViewById<ImageView>(R.id.editProfile)
 
         editProfile.setOnClickListener {
-//            val intent = Intent(requireContext(), AccountActivity::class.java)
-//            startActivity(intent)
-
             val inflater = LayoutInflater.from(requireContext())
             val editProfileView = inflater.inflate(R.layout.edit_profile, binding.root, false)
 
@@ -65,39 +70,9 @@ class HomeFragment : Fragment() {
 
         addBlogButton.setOnClickListener {
             addBlogPopup()
-            Log.d("Blog Button", "Add Blog Button Clicked!")
-            val db = FirebaseFirestore.getInstance()
-            db.collection("blogs")
-                .get()
-                .addOnSuccessListener { result ->
-                    Log.d("get db", "get db")
-                    Log.d("result", result.size().toString())
-                    // Iterate through the documents in the collection
-                    for (document in result) {
-                        val blog = document.toObject(Blog::class.java)
-                        Log.d("blog user", blog.username.toString())
-                        Log.d("blog descrip", blog.description)
-                        Log.d("blog url", blog.url)
-                        Log.d("blog time", blog.timestamp.toString())
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.e("Blog Fetch", "Error fetching blogs", exception)
-                    Toast.makeText(requireContext(), "Failed to fetch blogs", Toast.LENGTH_SHORT)
-                        .show()
-                }
         }
 
         fetchBlogs()
-
-
-
-        // Populate the view with blog data
-        populateBlogView()
-
-        Log.d("blog fetching", blogList.size.toString())
-
-
 
         return root
     }
@@ -135,29 +110,23 @@ class HomeFragment : Fragment() {
             val blog = Blog(
                 username = currentUser?.displayName,
                 title = title,
-                description = body, url = "",
+                description = body,
+                url = "",
                 timestamp = System.currentTimeMillis()
             )
 
-            // should add this code to update display name for users
-//            val profileUpdates = UserProfileChangeRequest.Builder()
-//                .setDisplayName("Your Username")
-//                .build()
-//
-//            FirebaseAuth.getInstance().currentUser?.updateProfile(profileUpdates)
-//                ?.addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        Log.d("Update Profile", "User profile updated.")
-//                    }
-//                }
-
             val db = FirebaseFirestore.getInstance()
             db.collection("blogs").add(blog)
-
+                .addOnSuccessListener {
+                    // Refresh blogs after adding
+                    fetchBlogs()
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(requireContext(), "Failed to add blog", Toast.LENGTH_SHORT).show()
+                }
 
             dialog.dismiss()
         }
-
     }
 
     private fun fetchBlogs() {
@@ -167,35 +136,14 @@ class HomeFragment : Fragment() {
             .addOnSuccessListener { result ->
                 blogList.clear()
                 for (document in result) {
-                    Log.d("***", document.toString())
                     val blog = document.toObject(Blog::class.java)
                     blogList.add(blog)
                 }
-                populateBlogView()
+                blogAdapter.updateBlogs(blogList)
             }
             .addOnFailureListener { exception ->
                 Log.e("Blog Fetch", "Error fetching blogs", exception)
                 Toast.makeText(requireContext(), "Failed to fetch blogs", Toast.LENGTH_SHORT).show()
             }
-    }
-
-    private fun populateBlogView() {
-        // Clear any existing blog views
-//        binding.blogContainer.removeAllViews()
-
-        // Inflate and add blog views
-        for (blog in blogList) {
-            Log.d("hit", "hit")
-            val blogView = layoutInflater.inflate(R.layout.blog_item, binding.blogContainer, false)
-//            blogView.findViewById<TextView>(R.id.blogTitle).text = blog.title
-            blogView.findViewById<TextView>(R.id.blogTitle).text = blog.title
-            blogView.findViewById<TextView>(R.id.blogDescription).text = blog.description
-            blogView.findViewById<TextView>(R.id.blogUsername).text = blog.username
-            blogView.findViewById<TextView>(R.id.blogTimestamp).text = blog.timestamp.toString()
-//            Glide.with(requireContext())
-//                .load(blog.url)
-//                .into(blogView.findViewById(R.id.blogImage))
-            binding.blogContainer.addView(blogView)
-        }
     }
 }

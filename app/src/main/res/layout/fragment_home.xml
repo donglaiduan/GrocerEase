@@ -25,7 +25,7 @@
             android:textAlignment="center"
             android:textSize="20sp" />
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/blogContainer"
             android:layout_width="400dp"
             android:layout_height="672dp"
@@ -33,7 +33,7 @@
             android:layout_marginTop="8dp"
             android:orientation="vertical">
 
-        </LinearLayout>
+        </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
 
