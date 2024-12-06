@@ -16,6 +16,13 @@
     <string name="info_button">Info</string>
     <string name="addItemText">Add</string>
     <string name="addBlogSuggestion">Add Blog</string>
+    <string name="username_text">Username</string>
+    <string name="weight_text">Weight (lbs)</string>
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
     <string-array name="item_amount_array">
         <item>1</item>
         <item>2</item>

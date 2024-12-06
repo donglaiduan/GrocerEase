@@ -1,6 +1,5 @@
 package com.cs407.grocerease.ui.home
 
-import AccountActivity
 import BlogAdapter
 import android.app.Activity
 import android.app.AlertDialog
@@ -20,6 +19,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cs407.grocerease.AccountActivity
 import com.cs407.grocerease.Blog
 import com.cs407.grocerease.R
 import com.cs407.grocerease.databinding.FragmentHomeBinding
@@ -65,14 +65,17 @@ class HomeFragment : Fragment() {
         val editProfile = root.findViewById<ImageView>(R.id.editProfile)
 
         editProfile.setOnClickListener {
-            val inflater = LayoutInflater.from(requireContext())
-            val editProfileView = inflater.inflate(R.layout.edit_profile, binding.root, false)
+//            val inflater = LayoutInflater.from(requireContext())
+//            val editProfileView = inflater.inflate(R.layout.edit_profile, binding.root, false)
+//
+//            // Clear the current content
+//            binding.root.removeAllViews()
+//
+//            // Add the new view (edit profile layout)
+//            binding.root.addView(editProfileView)
 
-            // Clear the current content
-            binding.root.removeAllViews()
-
-            // Add the new view (edit profile layout)
-            binding.root.addView(editProfileView)
+            val intent = Intent(requireContext(), AccountActivity::class.java)
+            startActivity(intent)
         }
 
         addBlogButton.setOnClickListener {

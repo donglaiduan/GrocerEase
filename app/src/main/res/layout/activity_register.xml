@@ -18,6 +18,14 @@
         android:layout_marginBottom="24dp" />
 
     <EditText
+        android:id="@+id/usernameEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/username_text"
+        android:inputType="textPersonName"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
         android:id="@+id/emailEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,6 +39,20 @@
         android:layout_height="wrap_content"
         android:hint="@string/password_text"
         android:inputType="textPassword"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/weightEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/weight_text"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="16dp" />
+
+    <Spinner
+        android:id="@+id/genderSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
 
     <Button

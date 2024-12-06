@@ -30,17 +30,15 @@ class BlogAdapter(private var blogs: List<Blog>) : RecyclerView.Adapter<BlogAdap
         holder.usernameTextView.text = blog.username
         holder.timestampTextView.text = blog.timestamp.toString()
 
-        // Load the image using Glide
         Glide.with(holder.itemView.context)
             .load(blog.url)
-//            .placeholder(R.drawable.placeholder)
-//            .error(R.drawable.error)
+            .placeholder(R.drawable.baseline_no_food_24)
+            .error(R.drawable.baseline_no_food_24)
             .into(holder.blogImageView)
     }
 
     override fun getItemCount(): Int = blogs.size
 
-    // Method to update the list of blogs
     fun updateBlogs(newBlogs: List<Blog>) {
         blogs = newBlogs
         notifyDataSetChanged()

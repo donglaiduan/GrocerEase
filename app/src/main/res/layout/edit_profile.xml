@@ -97,7 +97,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvPassword" />
 
+    <!-- Gender Field -->
+    <TextView
+        android:id="@+id/tvGender"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Gender:"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        android:layout_marginTop="16dp" />
 
+    <Spinner
+        android:id="@+id/spinnerGender"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvGender" />
 
     <!-- Current Weight -->
     <TextView
@@ -108,7 +126,7 @@
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        app:layout_constraintTop_toBottomOf="@id/spinnerGender"
         android:layout_marginTop="16dp" />
 
     <LinearLayout
@@ -183,10 +201,7 @@
             android:text="+" />
     </LinearLayout>
 
-    <!-- Save Button -->
-
-    <!-- Log Out Button -->
-
+    <!-- Action Buttons -->
     <LinearLayout
         android:id="@+id/layoutButtons"
         android:layout_width="0dp"

@@ -1,17 +1,21 @@
+package com.cs407.grocerease;
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import com.cs407.grocerease.R
 import com.google.firebase.firestore.FirebaseFirestore
+
 
 class AccountActivity : AppCompatActivity() {
     private lateinit var emailEditText: EditText
     private lateinit var usernameEditText: EditText
     private lateinit var weightValueTextView: TextView
     private lateinit var daysValueTextView: TextView
+    private lateinit var genderSpinner: Spinner
     private lateinit var saveButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +27,18 @@ class AccountActivity : AppCompatActivity() {
         usernameEditText = findViewById(R.id.etUsername)
         weightValueTextView = findViewById(R.id.tvWeightValue)
         daysValueTextView = findViewById(R.id.tvDaysValue)
+        genderSpinner = findViewById(R.id.spinnerGender)
         saveButton = findViewById(R.id.btnSave)
+
+        // Set up the gender spinner
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.gender_options,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            genderSpinner.adapter = adapter
+        }
 
         // Mock: Load initial data (replace with actual Firebase or SharedPreferences fetch)
         loadUserData()
@@ -42,6 +57,7 @@ class AccountActivity : AppCompatActivity() {
         usernameEditText.setText("PositivePanda44")
         weightValueTextView.text = "160 Pounds"
         daysValueTextView.text = "7 Days"
+        genderSpinner.setSelection(0) // Set default gender selection (e.g., "Male")
     }
 
     private fun adjustWeight(delta: Int) {
@@ -61,6 +77,7 @@ class AccountActivity : AppCompatActivity() {
         val username = usernameEditText.text.toString()
         val weight = weightValueTextView.text.toString()
         val days = daysValueTextView.text.toString()
+        val gender = genderSpinner.selectedItem.toString()
 
         // Save to Firebase Firestore
         val db = FirebaseFirestore.getInstance()
@@ -68,7 +85,8 @@ class AccountActivity : AppCompatActivity() {
             "email" to email,
             "username" to username,
             "weight" to weight,
-            "days" to days
+            "days" to days,
+            "gender" to gender
         )
 
         db.collection("users")
