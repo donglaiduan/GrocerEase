@@ -65,6 +65,11 @@
                 createNewList()
             }
 
+            //View recent lists button
+            binding.AllListButton.setOnClickListener {
+                showAllRecentListsPopup()
+            }
+
             return root
         }
 
@@ -361,6 +366,75 @@
                 }
             )
             volleyQueue.add(jsonObjectRequest)
+        }
+
+        private fun showAllRecentListsPopup() {
+            val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.recent_lists_popup, null)
+
+            val recyclerView = dialogView.findViewById<RecyclerView>(R.id.recentListPopupsView)
+            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+            val sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
+            val combinedList = sharedPreferences.getString(recentListsShared, null) ?: ""
+            val recentLists = combinedList.split("|").filter { it.isNotEmpty() }.toMutableList()
+
+            val popup = RecentListsPopupView(
+                recentLists,
+                onDeleteClick = { position ->
+                    recentLists.removeAt(position)
+                    sharedPreferences.edit().putString(recentListsShared, recentLists.joinToString("|")).apply()
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    showRecentLists(recentLists)
+                    Toast.makeText(context, "List deleted", Toast.LENGTH_SHORT).show()
+                },
+                onSetCurrentClick = { position ->
+                    val sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
+
+                    val selectedList = recentLists[position]
+                    recentLists.removeAt(position)
+
+                    val currentName = binding.GroceryListTitleText.text.toString()
+                    if (currentName.isNotEmpty() && currentListItems.isNotEmpty()) {
+                        val currentFullList = "$currentName:${currentListItems.joinToString(";") { "${it.name},${it.amount}" }}"
+                        recentLists.add(0, currentFullList)
+                    }
+
+                    val splitList = selectedList.split(":")
+                    val listName = splitList[0]
+                    val items = splitList[1].split(";").filter { it.isNotEmpty() }
+
+                    binding.GroceryListTitleText.setText(listName)
+                    currentListItems.clear()
+                    items.forEach {
+                        val itemInfo = it.split(",")
+                        if (itemInfo.size == 2) {
+                            val name = itemInfo[0]
+                            val amount = itemInfo[1].toDouble()
+                            currentListItems.add(GroceryItem(name, "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, amount, ""))
+                        }
+                    }
+
+                    currentListRecycleView.notifyDataSetChanged()
+                    sharedPreferences.edit().putString(recentListsShared, recentLists.joinToString("|")).apply()
+                    saveList()
+
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    showRecentLists(recentLists)
+
+                    Toast.makeText(context, "List set as current", Toast.LENGTH_SHORT).show()
+                }
+            )
+
+            recyclerView.adapter = popup
+
+            val dialog = android.app.AlertDialog.Builder(requireContext())
+                .setTitle("All Lists")
+                .setView(dialogView)
+                .setNegativeButton("Close", null)
+                .create()
+
+            dialog.show()
+
         }
 
 
