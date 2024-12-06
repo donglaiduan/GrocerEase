@@ -6,7 +6,7 @@ data class Blog(
     val username: String?,
     val title: String,
     val description: String,
-    val url: String,
+    var url: String,
     val timestamp: Long = 0L
 ) {
     constructor() : this("", "", "", "", 0L)

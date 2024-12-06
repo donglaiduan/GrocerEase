@@ -50,7 +50,7 @@
 
     <ImageView
         android:id="@+id/editProfile"
-        android:layout_width="175dp"
+        android:layout_width="0dp"
         android:layout_height="175dp"
         android:layout_marginStart="325dp"
         android:layout_marginTop="645dp"
