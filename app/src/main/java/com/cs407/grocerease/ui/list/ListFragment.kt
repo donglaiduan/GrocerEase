@@ -153,16 +153,17 @@
             binding.RecentListLayout.visibility = View.VISIBLE
 
             for(recentList in recentLists) {
-                val split = recentList.split(":")
+                val split = recentList.split("*")
 
-                if (split.size == 2) {
+                if (split.size >= 2) {
                     val listName = split[0]
                     val items = split[1].split(";")
                     val shownItems = items.take(3)
                     val itemTextString = StringBuilder()
 
                     shownItems.forEach { item ->
-                        itemTextString.append("$item\n")
+                        val itemName = item.split(":")
+                        itemTextString.append("${itemName[1]}\n")
                     }
 
                     if (items.size > 3) {
@@ -204,7 +205,18 @@
             val combinedList = sharedPreferences.getString(recentListsShared, "") ?: ""
 
             val currentName = binding.GroceryListTitleText.text.toString()
-            val currentFullList = "$currentName:${currentListItems.joinToString(";") { "${it.name},${it.amount}" }}"
+            val currentFullList = "$currentName*${currentListItems.joinToString(";") { "${it.name}:${it.description}:" +
+                    "${it.calories}:${it.caloriesUnit}:" +
+                    "${it.carbs}:${it.carbsUnit}:" +
+                    "${it.fat}:${it.fatUnit}:" +
+                    "${it.protein}:${it.proteinUnit}:" +
+                    "${it.fiber}:${it.fiberUnit}:" +
+                    "${it.potassium}:${it.potassiumUnit}:" +
+                    "${it.calcium}:${it.calciumUnit}:" +
+                    "${it.iron}:${it.ironUnit}:" +
+                    "${it.folate}:${it.folateUnit}:" +
+                    "${it.vitaminD}:${it.vitaminDUnit}:" +
+                    "${it.amount}" }}"
 
             val recentLists = combinedList.split("|").toMutableList()
 
@@ -425,23 +437,36 @@
 
                     val currentName = binding.GroceryListTitleText.text.toString()
                     if (currentName.isNotEmpty() && currentListItems.isNotEmpty()) {
-                        val currentFullList = "$currentName:${currentListItems.joinToString(";") { "${it.name},${it.amount}" }}"
+                        val currentFullList = "$currentName*${currentListItems.joinToString(";") { "${it.name}:${it.description}:" +
+                                "${it.calories}:${it.caloriesUnit}:" +
+                                "${it.carbs}:${it.carbsUnit}:" +
+                                "${it.fat}:${it.fatUnit}:" +
+                                "${it.protein}:${it.proteinUnit}:" +
+                                "${it.fiber}:${it.fiberUnit}:" +
+                                "${it.potassium}:${it.potassiumUnit}:" +
+                                "${it.calcium}:${it.calciumUnit}:" +
+                                "${it.iron}:${it.ironUnit}:" +
+                                "${it.folate}:${it.folateUnit}:" +
+                                "${it.vitaminD}:${it.vitaminDUnit}:" +
+                                "${it.amount}" }}"
                         recentLists.add(0, currentFullList)
                     }
 
-                    val splitList = selectedList.split(":")
+                    val splitList = selectedList.split("*")
                     val listName = splitList[0]
                     val items = splitList[1].split(";").filter { it.isNotEmpty() }
 
                     binding.GroceryListTitleText.setText(listName)
                     currentListItems.clear()
                     items.forEach {
-                        val itemInfo = it.split(",")
-                        if (itemInfo.size == 2) {
-                            val name = itemInfo[0]
-                            val amount = itemInfo[1].toDouble()
-                            currentListItems.add(GroceryItem(name, "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, amount, ""))
-                        }
+                        val itemInfo = it.split(":")
+                        if (itemInfo.size == 23) {
+                            currentListItems.add(GroceryItem(itemInfo[0],itemInfo[1],itemInfo[2].toDouble(),
+                                itemInfo[3],itemInfo[4].toDouble(),itemInfo[5],itemInfo[6].toDouble(),
+                                itemInfo[7],itemInfo[8].toDouble(),itemInfo[9],itemInfo[10].toDouble(),
+                                itemInfo[11],itemInfo[12].toDouble(),itemInfo[13],itemInfo[14].toDouble(),
+                                itemInfo[15],itemInfo[16].toDouble(),itemInfo[17],itemInfo[18].toDouble(),
+                                itemInfo[19],itemInfo[20].toDouble(),itemInfo[21],itemInfo[22].toDouble()))                        }
                     }
 
                     currentListRecycleView.notifyDataSetChanged()

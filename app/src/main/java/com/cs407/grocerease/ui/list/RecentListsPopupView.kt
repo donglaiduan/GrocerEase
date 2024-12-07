@@ -30,7 +30,7 @@ class RecentListsPopupView (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val listInfo = recentLists[position].split(":")
+        val listInfo = recentLists[position].split("*")
         val listTitle = listInfo[0]
 
         holder.itemView.findViewById<TextView>(R.id.recentListTitle).text = listTitle
