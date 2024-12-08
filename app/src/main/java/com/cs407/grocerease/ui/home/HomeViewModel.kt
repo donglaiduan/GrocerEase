@@ -10,7 +10,7 @@ import com.cs407.grocerease.fetchAllBlogs
 
 class HomeViewModel : ViewModel() {
     private val _text = MutableLiveData<String>().apply {
-        value = "Hello This is home Fragment"
+//        value = "Blog Posts"
     }
 
 //    fetchAllBlogs()
