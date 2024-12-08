@@ -65,6 +65,11 @@
                 createNewList()
             }
 
+            //View recent lists button
+            binding.AllListButton.setOnClickListener {
+                showAllRecentListsPopup()
+            }
+
             return root
         }
 
@@ -76,8 +81,17 @@
             sharedPreferences.edit().putString(currentListNameShared, listName).apply()
 
             val combinedList = currentListItems.joinToString(";") { "${it.name}:${it.description}:" +
-                    "${it.calories}:${it.carbs}:${it.fat}:${it.protein}:${it.fiber}:${it.potassium}:${it.calcium}:${it.iron}:" +
-                    "${it.folate}:${it.vitaminD}:${it.amount}:${it.unit}" }
+                    "${it.calories}:${it.caloriesUnit}:" +
+                    "${it.carbs}:${it.carbsUnit}:" +
+                    "${it.fat}:${it.fatUnit}:" +
+                    "${it.protein}:${it.proteinUnit}:" +
+                    "${it.fiber}:${it.fiberUnit}:" +
+                    "${it.potassium}:${it.potassiumUnit}:" +
+                    "${it.calcium}:${it.calciumUnit}:" +
+                    "${it.iron}:${it.ironUnit}:" +
+                    "${it.folate}:${it.folateUnit}:" +
+                    "${it.vitaminD}:${it.vitaminDUnit}:" +
+                    "${it.amount}" }
             sharedPreferences.edit().putString(currentListItemsShared, combinedList).apply()
         }
 
@@ -96,24 +110,13 @@
                 currentListItems.clear()
                 items.forEach{
                     val split = it.split(":")
-                    if (split.size == 14) {
-                        val itemName = split[0]
-                        val itemDescription = split[1]
-                        val itemCalories = split[2].toDouble()
-                        val itemCarbs = split[3].toDouble()
-                        val itemFat = split[4].toDouble()
-                        val itemProtein = split[5].toDouble()
-                        val itemFiber = split[6].toDouble()
-                        val itemPotassium = split[7].toDouble()
-                        val itemCalcium = split[8].toDouble()
-                        val itemIron = split[9].toDouble()
-                        val itemFolate = split[10].toDouble()
-                        val itemVitaminD = split[11].toDouble()
-                        val itemAmount = split[12].toDouble()
-                        val itemUnit = split[13]
-                        currentListItems.add(GroceryItem(itemName, itemDescription, itemCalories, itemCarbs, itemFat,
-                            itemProtein, itemFiber, itemPotassium, itemCalcium, itemIron, itemFolate,
-                            itemVitaminD, itemAmount,itemUnit))
+                    if (split.size == 23) {
+                        currentListItems.add(GroceryItem(split[0],split[1],split[2].toDouble(),
+                            split[3],split[4].toDouble(),split[5],split[6].toDouble(),
+                            split[7],split[8].toDouble(),split[9],split[10].toDouble(),
+                            split[11],split[12].toDouble(),split[13],split[14].toDouble(),
+                            split[15],split[16].toDouble(),split[17],split[18].toDouble(),
+                            split[19],split[20].toDouble(),split[21],split[22].toDouble()))
                     } else {
                         Log.w("ListFragment", "loadCurrentList split error")
                     }
@@ -150,16 +153,17 @@
             binding.RecentListLayout.visibility = View.VISIBLE
 
             for(recentList in recentLists) {
-                val split = recentList.split(":")
+                val split = recentList.split("*")
 
-                if (split.size == 2) {
+                if (split.size >= 2) {
                     val listName = split[0]
                     val items = split[1].split(";")
                     val shownItems = items.take(3)
                     val itemTextString = StringBuilder()
 
                     shownItems.forEach { item ->
-                        itemTextString.append("$item\n")
+                        val itemName = item.split(":")
+                        itemTextString.append("${itemName[1]}\n")
                     }
 
                     if (items.size > 3) {
@@ -201,7 +205,18 @@
             val combinedList = sharedPreferences.getString(recentListsShared, "") ?: ""
 
             val currentName = binding.GroceryListTitleText.text.toString()
-            val currentFullList = "$currentName:${currentListItems.joinToString(";") { "${it.name},${it.amount}" }}"
+            val currentFullList = "$currentName*${currentListItems.joinToString(";") { "${it.name}:${it.description}:" +
+                    "${it.calories}:${it.caloriesUnit}:" +
+                    "${it.carbs}:${it.carbsUnit}:" +
+                    "${it.fat}:${it.fatUnit}:" +
+                    "${it.protein}:${it.proteinUnit}:" +
+                    "${it.fiber}:${it.fiberUnit}:" +
+                    "${it.potassium}:${it.potassiumUnit}:" +
+                    "${it.calcium}:${it.calciumUnit}:" +
+                    "${it.iron}:${it.ironUnit}:" +
+                    "${it.folate}:${it.folateUnit}:" +
+                    "${it.vitaminD}:${it.vitaminDUnit}:" +
+                    "${it.amount}" }}"
 
             val recentLists = combinedList.split("|").toMutableList()
 
@@ -332,9 +347,9 @@
                     val foods = jsonObject.getJSONArray("foods")
                     for (i in 0 until foods.length()) {
                         val resultGroceryItem = GroceryItem(
-                            searchItem, "", 0.0, 0.0, 0.0,
-                            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                            0.0, ""
+                            searchItem, "", 0.0, "", 0.0, "", 0.0,
+                            "", 0.0, "", 0.0, "", 0.0, "", 0.0,
+                            "", 0.0, "", 0.0, "", 0.0, "", 0.0
                         )
                         val food = foods.getJSONObject(i)
                         resultGroceryItem.description = food.getString("description")
@@ -342,14 +357,46 @@
                         for (j in 0 until nutrients.length()) {
                             val nutrient = nutrients.getJSONObject(j)
                             when {
-                                nutrient.getString("nutrientName") == "Energy" && nutrient.getInt("nutrientId") == 1008 ->
+                                nutrient.getString("nutrientName") == "Energy" && nutrient.getInt("nutrientId") == 1008 -> {
                                     resultGroceryItem.calories = nutrient.getDouble("value")
-                                nutrient.getString("nutrientName") == "Carbohydrate, by summation" && nutrient.getInt("nutrientId") == 1050 ->
+                                    resultGroceryItem.caloriesUnit = nutrient.getString("unitName")
+                                }
+                                nutrient.getString("nutrientName") == "Carbohydrate, by difference" && nutrient.getInt("nutrientId") == 1005 -> {
                                     resultGroceryItem.carbs = nutrient.getDouble("value")
-                                nutrient.getString("nutrientName") == "Total lipid (fat)" && nutrient.getInt("nutrientId") == 1004 ->
+                                    resultGroceryItem.carbsUnit = nutrient.getString("unitName")
+                                }
+                                nutrient.getString("nutrientName") == "Total lipid (fat)" && nutrient.getInt("nutrientId") == 1004 -> {
                                     resultGroceryItem.fat = nutrient.getDouble("value")
-                                nutrient.getString("nutrientName") == "Protein" && nutrient.getInt("nutrientId") == 1003 ->
+                                    resultGroceryItem.fatUnit = nutrient.getString("unitName")
+                                }
+                                nutrient.getString("nutrientName") == "Protein" && nutrient.getInt("nutrientId") == 1003 -> {
                                     resultGroceryItem.protein = nutrient.getDouble("value")
+                                    resultGroceryItem.proteinUnit = nutrient.getString("unitName")
+                                }
+                                nutrient.getString("nutrientName") == "Fiber, total dietary" && nutrient.getInt("nutrientId") == 1079 -> {
+                                    resultGroceryItem.fiber = nutrient.getDouble("value")
+                                    resultGroceryItem.fiberUnit = nutrient.getString("unitName")
+                                }
+                                nutrient.getString("nutrientName") == "Potassium, K" && nutrient.getInt("nutrientId") == 1092 -> {
+                                    resultGroceryItem.potassium = nutrient.getDouble("value")
+                                    resultGroceryItem.potassiumUnit = nutrient.getString("unitName")
+                                }
+                                nutrient.getString("nutrientName") == "Calcium, Ca" && nutrient.getInt("nutrientId") == 1087 -> {
+                                    resultGroceryItem.calcium = nutrient.getDouble("value")
+                                    resultGroceryItem.calciumUnit = nutrient.getString("unitName")
+                                }
+                                nutrient.getString("nutrientName") == "Iron, Fe" && nutrient.getInt("nutrientId") == 1089 -> {
+                                    resultGroceryItem.iron = nutrient.getDouble("value")
+                                    resultGroceryItem.ironUnit = nutrient.getString("unitName")
+                                }
+                                nutrient.getString("nutrientName") == "Folate, total" && nutrient.getInt("nutrientId") == 1177 -> {
+                                    resultGroceryItem.folate = nutrient.getDouble("value")
+                                    resultGroceryItem.folateUnit = nutrient.getString("unitName")
+                                }
+                                nutrient.getString("nutrientName") == "Vitamin D (D2 + D3)" && nutrient.getInt("nutrientId") == 1114 -> {
+                                    resultGroceryItem.vitaminD = nutrient.getDouble("value")
+                                    resultGroceryItem.vitaminDUnit = nutrient.getString("unitName")
+                                }
                             }
                         }
                         results.add(resultGroceryItem)
@@ -361,6 +408,88 @@
                 }
             )
             volleyQueue.add(jsonObjectRequest)
+        }
+
+        private fun showAllRecentListsPopup() {
+            val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.recent_lists_popup, null)
+
+            val recyclerView = dialogView.findViewById<RecyclerView>(R.id.recentListPopupsView)
+            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+            val sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
+            val combinedList = sharedPreferences.getString(recentListsShared, null) ?: ""
+            val recentLists = combinedList.split("|").filter { it.isNotEmpty() }.toMutableList()
+
+            val popup = RecentListsPopupView(
+                recentLists,
+                onDeleteClick = { position ->
+                    recentLists.removeAt(position)
+                    sharedPreferences.edit().putString(recentListsShared, recentLists.joinToString("|")).apply()
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    showRecentLists(recentLists)
+                    Toast.makeText(context, "List deleted", Toast.LENGTH_SHORT).show()
+                },
+                onSetCurrentClick = { position ->
+                    val sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
+
+                    val selectedList = recentLists[position]
+                    recentLists.removeAt(position)
+
+                    val currentName = binding.GroceryListTitleText.text.toString()
+                    if (currentName.isNotEmpty() && currentListItems.isNotEmpty()) {
+                        val currentFullList = "$currentName*${currentListItems.joinToString(";") { "${it.name}:${it.description}:" +
+                                "${it.calories}:${it.caloriesUnit}:" +
+                                "${it.carbs}:${it.carbsUnit}:" +
+                                "${it.fat}:${it.fatUnit}:" +
+                                "${it.protein}:${it.proteinUnit}:" +
+                                "${it.fiber}:${it.fiberUnit}:" +
+                                "${it.potassium}:${it.potassiumUnit}:" +
+                                "${it.calcium}:${it.calciumUnit}:" +
+                                "${it.iron}:${it.ironUnit}:" +
+                                "${it.folate}:${it.folateUnit}:" +
+                                "${it.vitaminD}:${it.vitaminDUnit}:" +
+                                "${it.amount}" }}"
+                        recentLists.add(0, currentFullList)
+                    }
+
+                    val splitList = selectedList.split("*")
+                    val listName = splitList[0]
+                    val items = splitList[1].split(";").filter { it.isNotEmpty() }
+
+                    binding.GroceryListTitleText.setText(listName)
+                    currentListItems.clear()
+                    items.forEach {
+                        val itemInfo = it.split(":")
+                        if (itemInfo.size == 23) {
+                            currentListItems.add(GroceryItem(itemInfo[0],itemInfo[1],itemInfo[2].toDouble(),
+                                itemInfo[3],itemInfo[4].toDouble(),itemInfo[5],itemInfo[6].toDouble(),
+                                itemInfo[7],itemInfo[8].toDouble(),itemInfo[9],itemInfo[10].toDouble(),
+                                itemInfo[11],itemInfo[12].toDouble(),itemInfo[13],itemInfo[14].toDouble(),
+                                itemInfo[15],itemInfo[16].toDouble(),itemInfo[17],itemInfo[18].toDouble(),
+                                itemInfo[19],itemInfo[20].toDouble(),itemInfo[21],itemInfo[22].toDouble()))                        }
+                    }
+
+                    currentListRecycleView.notifyDataSetChanged()
+                    sharedPreferences.edit().putString(recentListsShared, recentLists.joinToString("|")).apply()
+                    saveList()
+
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    showRecentLists(recentLists)
+
+                    Toast.makeText(context, "List set as current", Toast.LENGTH_SHORT).show()
+                }
+            )
+
+            recyclerView.adapter = popup
+
+            val dialog = android.app.AlertDialog.Builder(requireContext())
+                .setTitle("All Lists")
+                .setView(dialogView)
+                .setNegativeButton("Close", null)
+                .create()
+
+            dialog.show()
+
         }
 
 
