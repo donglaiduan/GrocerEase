@@ -104,7 +104,7 @@ class MapFragment : Fragment() {
                         "ingredients and frozen foods along with household goods and electronics.",
                 destination = LatLng(43.07518772160185, -89.39607681824377))
 
-            //Walgreens
+            //Walgreens 1
             setLocationMarker(
                 googleMap = map,
                 destinationName = "Walgreens",
@@ -114,6 +114,17 @@ class MapFragment : Fragment() {
                         "groceries with a focus on snacks and instant foods. Walgreens is" +
                         "open until midnight and also provides a pharmacy.",
                 destination = LatLng(43.07245969228958, -89.39856426057304))
+
+            //Walgreens 2
+            setLocationMarker(
+                googleMap = map,
+                destinationName = "Walgreens",
+                destinationDescription = "Address: 676 State St, Madison, WI 53703\n" +
+                        "$$\n" +
+                        "Located at the beginning of state street, Walgreen has many quick-grab " +
+                        "groceries with a focus on snacks and instant foods. Walgreens is" +
+                        "open until midnight and also provides a pharmacy.",
+                destination = LatLng(43.07517782906013, -89.3971707891812))
 
             //KwikTrip
             setLocationMarker(
@@ -180,6 +191,8 @@ class MapFragment : Fragment() {
                         "wide variety of groceries and household items. Although a bit far, it " +
                         "has affordable prices and weakly deals.",
                 destination = LatLng(43.05247737233041, -89.39591557577499))
+
+
 
         }
         return root
