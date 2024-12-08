@@ -132,6 +132,8 @@ class HomeFragment : Fragment() {
 
     private fun uploadBlog(title: String, body: String, imageUri: Uri?) {
         val currentUser = FirebaseAuth.getInstance().currentUser
+        val db = FirebaseFirestore.getInstance()
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
 
         // Add some validation
         if (title.isEmpty() || body.isEmpty()) {
@@ -139,47 +141,70 @@ class HomeFragment : Fragment() {
             return
         }
 
-        val blog = Blog(
-            username = currentUser?.displayName ?: "Anonymous",
-            title = title,
-            description = body,
-            url = "", // TODO what is url
-            timestamp = System.currentTimeMillis()
-        )
+        if (userId != null) {
+            // Fetch the username before proceeding
+            db.collection("users").document(userId).get()
+                .addOnSuccessListener { document ->
+                    val username = if (document.exists()) {
+                        document.getString("username") ?: "Anonymous"
+                    } else {
+                        "Anonymous"
+                    }
+                    Log.d("username", username) // Ensure we log the correct username
 
-        val db = FirebaseFirestore.getInstance()
-        db.collection("blogs").add(blog)
-            .addOnSuccessListener { documentReference ->
-                // Upload the selected image to Firebase Storage
-                imageUri?.let { uri ->
-                    val filename = "${currentUser?.uid}_${System.currentTimeMillis()}.jpg"
-                    val storageRef = FirebaseStorage.getInstance().reference.child("blog_images/$filename")
+                    // Create the blog object with the fetched username
+                    val blog = Blog(
+                        username = username,
+                        title = title,
+                        description = body,
+                        url = "",
+                        timestamp = System.currentTimeMillis()
+                    )
 
-                    storageRef.putFile(uri)
-                        .addOnSuccessListener { taskSnapshot ->
-                            taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUrl ->
-                                // Update the blog's URL field with the download URL
-                                val updatedBlog = blog.copy(url = downloadUrl.toString())
-                                db.collection("blogs").document(documentReference.id).set(updatedBlog)
-                                    .addOnCompleteListener {
-                                        fetchBlogs()
+                    // Upload the blog to Firestore
+                    db.collection("blogs").add(blog)
+                        .addOnSuccessListener { documentReference ->
+                            // If an image URI is provided, upload the image
+                            imageUri?.let { uri ->
+                                val filename = "${currentUser?.uid}_${System.currentTimeMillis()}.jpg"
+                                val storageRef = FirebaseStorage.getInstance().reference.child("blog_images/$filename")
+
+                                storageRef.putFile(uri)
+                                    .addOnSuccessListener { taskSnapshot ->
+                                        taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUrl ->
+                                            // Update the blog's URL field with the image URL
+                                            val updatedBlog = blog.copy(url = downloadUrl.toString())
+                                            db.collection("blogs").document(documentReference.id).set(updatedBlog)
+                                                .addOnCompleteListener {
+                                                    Toast.makeText(requireContext(), "Blog uploaded successfully!", Toast.LENGTH_SHORT).show()
+                                                    fetchBlogs()
+                                                }
+                                        }
                                     }
+                                    .addOnFailureListener { exception ->
+                                        Log.e("Image Upload", "Failed to upload image", exception)
+                                        Toast.makeText(requireContext(), "Failed to upload image", Toast.LENGTH_SHORT).show()
+                                    }
+                            } ?: run {
+                                // If no image was selected, just refresh blogs
+                                Toast.makeText(requireContext(), "Blog uploaded successfully!", Toast.LENGTH_SHORT).show()
+                                fetchBlogs()
                             }
                         }
                         .addOnFailureListener { exception ->
-                            Log.e("Image Upload", "Failed to upload image", exception)
-                            Toast.makeText(requireContext(), "Failed to upload image", Toast.LENGTH_SHORT).show()
+                            Log.e("Blog Upload", "Failed to add blog", exception)
+                            Toast.makeText(requireContext(), "Failed to add blog", Toast.LENGTH_SHORT).show()
                         }
-                } ?: run {
-                    // If no image was selected, just refresh blogs
-                    fetchBlogs()
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.e("Blog Upload", "Failed to add blog", exception)
-                Toast.makeText(requireContext(), "Failed to add blog", Toast.LENGTH_SHORT).show()
-            }
+                .addOnFailureListener { exception ->
+                    Log.e("Fetch Username", "Failed to fetch user data", exception)
+                    Toast.makeText(requireContext(), "Failed to fetch user data", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
+        }
     }
+
 
     private fun fetchBlogs() {
         val db = FirebaseFirestore.getInstance()
