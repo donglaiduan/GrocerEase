@@ -14,7 +14,7 @@ class BlogAdapter(private var blogs: List<Blog>) : RecyclerView.Adapter<BlogAdap
         val titleTextView: TextView = itemView.findViewById(R.id.blogTitle)
         val descriptionTextView: TextView = itemView.findViewById(R.id.blogDescription)
         val usernameTextView: TextView = itemView.findViewById(R.id.blogUsername)
-        val timestampTextView: TextView = itemView.findViewById(R.id.blogTimestamp)
+//        val timestampTextView: TextView = itemView.findViewById(R.id.blogTimestamp)
         val blogImageView: ImageView = itemView.findViewById(R.id.blogImage)
     }
 
@@ -28,7 +28,7 @@ class BlogAdapter(private var blogs: List<Blog>) : RecyclerView.Adapter<BlogAdap
         holder.titleTextView.text = blog.title
         holder.descriptionTextView.text = blog.description
         holder.usernameTextView.text = blog.username
-        holder.timestampTextView.text = blog.timestamp.toString()
+//        holder.timestampTextView.text = blog.timestamp.toString()
 
         Glide.with(holder.itemView.context)
             .load(blog.url)
