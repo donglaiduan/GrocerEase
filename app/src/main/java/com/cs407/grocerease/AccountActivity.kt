@@ -18,6 +18,8 @@ class AccountActivity : AppCompatActivity() {
     private lateinit var saveButton: Button
     private lateinit var cancelButton: Button
     private lateinit var logOutButton: Button
+    private lateinit var changePassword: Button
+    private lateinit var password: EditText
     private val db = FirebaseFirestore.getInstance()
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -34,6 +36,8 @@ class AccountActivity : AppCompatActivity() {
         saveButton = findViewById(R.id.btnSave)
         cancelButton = findViewById(R.id.btnCancel)
         logOutButton = findViewById(R.id.btnLogout)
+        changePassword = findViewById(R.id.btnChangePassword)
+        password = findViewById((R.id.etPassword))
 
         // Set up the gender spinner
         ArrayAdapter.createFromResource(
@@ -65,7 +69,33 @@ class AccountActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        changePassword.setOnClickListener {
+            changePassword()
+        }
 
+
+    }
+
+    private fun changePassword() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val newPassword = password.text.toString()
+
+        if (currentUser != null) {
+            if (newPassword.isNotEmpty() && newPassword.length >= 6) {
+                currentUser.updatePassword(newPassword)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Password changed successfully!", Toast.LENGTH_SHORT).show()
+                        password.text.clear()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(this, "Failed to change password: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
+            } else {
+                Toast.makeText(this, "Password must be at least 6 characters long", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(this, "No user is currently logged in.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun loadUserData() {
@@ -126,23 +156,12 @@ class AccountActivity : AppCompatActivity() {
             days = days,
             gender = gender,
         )
-//        val user = User(
-//            userId = userId,
-//            email = email,
-//            username = username,
-//            weight = weight,
-//            days = days,
-//            gender = gender
-//        )
 
         if(userId != null) {
             db.collection("users").document(userId)
                 .set(user)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Data saved successfully!", Toast.LENGTH_SHORT).show()
-//                    val intent = Intent(this, HomeActivity::class.java)
-//                    startActivity(intent)
-//                    finish()
                     finish()
                 }
                 .addOnFailureListener { e ->

@@ -65,15 +65,6 @@ class HomeFragment : Fragment() {
         val editProfile = root.findViewById<ImageView>(R.id.editProfile)
 
         editProfile.setOnClickListener {
-//            val inflater = LayoutInflater.from(requireContext())
-//            val editProfileView = inflater.inflate(R.layout.edit_profile, binding.root, false)
-//
-//            // Clear the current content
-//            binding.root.removeAllViews()
-//
-//            // Add the new view (edit profile layout)
-//            binding.root.addView(editProfileView)
-
             val intent = Intent(requireContext(), AccountActivity::class.java)
             startActivity(intent)
         }
@@ -161,7 +152,6 @@ class HomeFragment : Fragment() {
             .addOnSuccessListener { documentReference ->
                 // Upload the selected image to Firebase Storage
                 imageUri?.let { uri ->
-                    // Use a more unique filename to prevent overwriting
                     val filename = "${currentUser?.uid}_${System.currentTimeMillis()}.jpg"
                     val storageRef = FirebaseStorage.getInstance().reference.child("blog_images/$filename")
 

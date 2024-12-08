@@ -64,15 +64,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvUsername" />
 
-    <Button
-        android:id="@+id/btnRandomizeUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Randomize Username"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etUsername"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+<!--    <Button-->
+<!--        android:id="@+id/btnRandomizeUsername"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Randomize Username"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/etUsername"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="8dp" />-->
 
     <!-- Password Field -->
     <TextView
@@ -83,7 +83,7 @@
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnRandomizeUsername"
+        app:layout_constraintTop_toBottomOf="@id/etUsername"
         android:layout_marginTop="16dp" />
 
     <EditText
@@ -97,6 +97,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvPassword" />
 
+    <!-- Change Password Button -->
+    <Button
+        android:id="@+id/btnChangePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change Password"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        android:layout_marginTop="8dp" />
+
     <!-- Gender Field -->
     <TextView
         android:id="@+id/tvGender"
@@ -106,7 +117,7 @@
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        app:layout_constraintTop_toBottomOf="@id/btnChangePassword"
         android:layout_marginTop="16dp" />
 
     <Spinner
@@ -231,8 +242,6 @@
             android:backgroundTint="#A8E6CF"
             android:textAllCaps="false" />
     </LinearLayout>
-
-    <!-- Log Out Button -->
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="0dp"
