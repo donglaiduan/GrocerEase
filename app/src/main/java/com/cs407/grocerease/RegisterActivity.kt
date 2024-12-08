@@ -10,6 +10,7 @@ import android.widget.Toast
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +23,7 @@ class RegisterActivity : AppCompatActivity() {
         val genderSpinner = findViewById<Spinner>(R.id.genderSpinner)
         val registerButton = findViewById<Button>(R.id.registerButton)
         val loginTextView = findViewById<TextView>(R.id.loginTextView)
+        val usernameEdit = findViewById<EditText>(R.id.usernameEdit)
 
         // Set up the Spinner for gender selection
         val genderOptions = arrayOf("Select Gender", "Male", "Female", "Other")
@@ -30,16 +32,17 @@ class RegisterActivity : AppCompatActivity() {
         genderSpinner.adapter = adapter
 
         registerButton.setOnClickListener {
+            val username = usernameEdit.text.toString().trim()
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
             val weight = weightEditText.text.toString().trim()
             val selectedGender = genderSpinner.selectedItem.toString()
-
             if (email.isEmpty() || password.isEmpty() || weight.isEmpty() || selectedGender == "Select Gender") {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             } else {
-                signUp(email, password)
+                signUp(email, password, username, weight.toInt(), selectedGender)
                 Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show()
+
                 // Navigate to the next activity
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
@@ -58,12 +61,33 @@ class RegisterActivity : AppCompatActivity() {
 private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
 // Sign Up
-fun signUp(email: String, password: String) {
+fun signUp(email: String, password: String, username: String, weight: Int, selectedGender: String) {
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // User registered successfully
+                val db = FirebaseFirestore.getInstance()
                 val user = auth.currentUser
+
+                val userId = user?.uid
+                val currUser = User(
+                    userId = userId,
+                    username = username,
+                    email = email,
+                    weight = weight.toInt(),
+                    days = 7,
+                    gender = selectedGender
+                )
+                if(userId != null) {
+                    db.collection("users").document(userId).set(currUser)
+                        .addOnSuccessListener {
+                            println("User details saved successfully!")
+                        }
+                        .addOnFailureListener { e ->
+                            println("Error saving user details: $e")
+                        }
+                }
+
                 println("User signed up: ${user?.email}")
             } else {
                 // Sign-up failed
