@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,17 +8,22 @@
     tools:context=".ui.recommendations.NutritionFragment">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <!-- Button Container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
             <!-- Recipes Button -->
             <Button
@@ -43,10 +47,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:paddingBottom="16dp"
             android:text="Nutrition Breakdown"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:paddingBottom="16dp" />
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/nutritionContainer"
@@ -66,9 +70,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingEnd="8dp"
                     android:text="Calories: "
-                    android:textSize="16sp"
-                    android:paddingEnd="8dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/calories_value_text"
@@ -81,24 +85,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ProgressBar
                     android:id="@+id/calories_progress_bar"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="8dp"
                     android:layout_weight="1"
-                    android:progress="80"
-                    android:visibility="visible"
-                    android:progressDrawable="@drawable/progress_bar_color" />
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:progressDrawable="@drawable/progress_bar_color"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/calories_percent_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0%"
                     android:paddingStart="8dp"
+                    android:text="0%"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -107,16 +113,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                >
 
                 <TextView
                     android:id="@+id/carbs_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingEnd="8dp"
                     android:text="Carbohydrates: "
-                    android:textSize="16sp"
-                    android:paddingEnd="8dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/carbs_value_text"
@@ -129,24 +136,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ProgressBar
                     android:id="@+id/carbs_progress_bar"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="8dp"
                     android:layout_weight="1"
-                    android:progress="80"
-                    android:visibility="visible"
-                    android:progressDrawable="@drawable/progress_bar_color" />
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:progressDrawable="@drawable/progress_bar_color"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/carbs_percent_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0%"
                     android:paddingStart="8dp"
+                    android:text="0%"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -155,16 +164,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                >
 
                 <TextView
                     android:id="@+id/fat_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingEnd="8dp"
                     android:text="Fat: "
-                    android:textSize="16sp"
-                    android:paddingEnd="8dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/fat_value_text"
@@ -177,24 +187,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ProgressBar
                     android:id="@+id/fat_progress_bar"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="8dp"
                     android:layout_weight="1"
-                    android:progress="80"
-                    android:visibility="visible"
-                    android:progressDrawable="@drawable/progress_bar_color" />
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:progressDrawable="@drawable/progress_bar_color"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/fat_percent_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0%"
                     android:paddingStart="8dp"
+                    android:text="0%"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -203,16 +215,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                >
 
                 <TextView
                     android:id="@+id/protein_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingEnd="8dp"
                     android:text="Protein: "
-                    android:textSize="16sp"
-                    android:paddingEnd="8dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/protein_value_text"
@@ -225,24 +238,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ProgressBar
                     android:id="@+id/protein_progress_bar"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="8dp"
                     android:layout_weight="1"
-                    android:progress="80"
-                    android:visibility="visible"
-                    android:progressDrawable="@drawable/progress_bar_color" />
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:progressDrawable="@drawable/progress_bar_color"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/protein_percent_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0%"
                     android:paddingStart="8dp"
+                    android:text="0%"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -251,16 +266,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                >
 
                 <TextView
                     android:id="@+id/fiber_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingEnd="8dp"
                     android:text="Fiber: "
-                    android:textSize="16sp"
-                    android:paddingEnd="8dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/fiber_value_text"
@@ -273,24 +289,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ProgressBar
                     android:id="@+id/fiber_progress_bar"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="8dp"
                     android:layout_weight="1"
-                    android:visibility="visible"
-                    android:progress="80"
-                    android:progressDrawable="@drawable/progress_bar_color" />
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:progressDrawable="@drawable/progress_bar_color"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/fiber_percent_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0%"
                     android:paddingStart="8dp"
+                    android:text="0%"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -299,16 +317,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                >
 
                 <TextView
                     android:id="@+id/potassium_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingEnd="8dp"
                     android:text="Potassium: "
-                    android:textSize="16sp"
-                    android:paddingEnd="8dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/potassium_value_text"
@@ -321,24 +340,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ProgressBar
                     android:id="@+id/potassium_progress_bar"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="8dp"
                     android:layout_weight="1"
-                    android:progress="80"
-                    android:visibility="visible"
-                    android:progressDrawable="@drawable/progress_bar_color" />
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:progressDrawable="@drawable/progress_bar_color"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/potassium_percent_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0%"
                     android:paddingStart="8dp"
+                    android:text="0%"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -347,16 +368,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                >
 
                 <TextView
                     android:id="@+id/calcium_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingEnd="8dp"
                     android:text="Calcium: "
-                    android:textSize="16sp"
-                    android:paddingEnd="8dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/calcium_value_text"
@@ -369,24 +391,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ProgressBar
                     android:id="@+id/calcium_progress_bar"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="8dp"
                     android:layout_weight="1"
-                    android:progress="80"
-                    android:visibility="visible"
-                    android:progressDrawable="@drawable/progress_bar_color" />
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:progressDrawable="@drawable/progress_bar_color"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/calcium_percent_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0%"
                     android:paddingStart="8dp"
+                    android:text="0%"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -395,16 +419,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                >
 
                 <TextView
                     android:id="@+id/iron_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingEnd="8dp"
                     android:text="Iron: "
-                    android:textSize="16sp"
-                    android:paddingEnd="8dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/iron_value_text"
@@ -417,24 +442,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ProgressBar
                     android:id="@+id/iron_progress_bar"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="8dp"
                     android:layout_weight="1"
-                    android:progress="80"
-                    android:visibility="visible"
-                    android:progressDrawable="@drawable/progress_bar_color" />
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:progressDrawable="@drawable/progress_bar_color"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/iron_percent_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0%"
                     android:paddingStart="8dp"
+                    android:text="0%"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -443,16 +470,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                >
 
                 <TextView
                     android:id="@+id/folate_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingEnd="8dp"
                     android:text="Folate: "
-                    android:textSize="16sp"
-                    android:paddingEnd="8dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/folate_value_text"
@@ -465,24 +493,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ProgressBar
                     android:id="@+id/folate_progress_bar"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="8dp"
                     android:layout_weight="1"
-                    android:progress="80"
-                    android:visibility="visible"
-                    android:progressDrawable="@drawable/progress_bar_color" />
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:progressDrawable="@drawable/progress_bar_color"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/folate_percent_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0%"
                     android:paddingStart="8dp"
+                    android:text="0%"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -491,16 +521,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                >
 
                 <TextView
                     android:id="@+id/vitaminD_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingEnd="8dp"
                     android:text="Vitamin D: "
-                    android:textSize="16sp"
-                    android:paddingEnd="8dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/vitaminD_value_text"
@@ -513,28 +544,28 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ProgressBar
                     android:id="@+id/vitaminD_progress_bar"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="8dp"
                     android:layout_weight="1"
-                    android:progress="80"
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
                     android:progressDrawable="@drawable/progress_bar_color"
-                    android:visibility="visible"/>
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/vitaminD_percent_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0%"
                     android:paddingStart="8dp"
+                    android:text="0%"
                     android:textSize="16sp" />
             </LinearLayout>
-
-
 
 
         </LinearLayout>
@@ -543,17 +574,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingTop="16dp"
             android:paddingBottom="8dp"
-            android:paddingTop="16dp">
+            >
 
             <TextView
                 android:id="@+id/days_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:paddingEnd="8dp"
                 android:text="Total Days: "
-                android:textSize="16sp"
-                android:paddingEnd="8dp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/total_days_text"

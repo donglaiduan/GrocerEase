@@ -1,6 +1,7 @@
 package com.cs407.grocerease.ui.recommendations
 
 import android.content.Context
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.cs407.grocerease.R
 import com.cs407.grocerease.databinding.FragmentNutritionBinding
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class NutritionFragment : Fragment() {
 
@@ -21,7 +25,9 @@ class NutritionFragment : Fragment() {
     private val sharedPrefs = "GroceryListPrefs"
     private val currentListItemsShared = "CurrentListItems"
 
-    private val days = 2;
+    private val userID = FirebaseAuth.getInstance().currentUser?.uid
+
+    private var days = 0;
     private val dailyCal = 2000.0;
     private val dailyCarb = 275.0;
     private val dailyFat = 78.0;
@@ -39,6 +45,20 @@ class NutritionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNutritionBinding.inflate(inflater, container, false)
+        val db = FirebaseFirestore.getInstance()
+
+        if (userID != null) {
+            db.collection("users").document(userID).get()
+                .addOnSuccessListener { document ->
+                    days = (document.getLong("days")?.toInt() ?: 7)
+                    displaySharedPreferenceItems()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context, "Failed to fetch days.", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            displaySharedPreferenceItems()
+        }
 
         // Handle button click to navigate to another fragment
         binding.fnRecipesButton.setOnClickListener {
@@ -93,50 +113,48 @@ class NutritionFragment : Fragment() {
             setProgressBar(binding.caloriesProgressBar, caloriesPercentage)
             binding.caloriesPercentText.text = "${caloriesPercentage}%"
 
-            Toast.makeText(context, "Reaching Calories.", Toast.LENGTH_SHORT).show()
-
-            val carbsPercentage = calculatePercentage(itemCalories, days * dailyCarb)
-            binding.carbsValueText.text = "%.2f kcal".format(itemCarbs)
+            val carbsPercentage = calculatePercentage(itemCarbs, days * dailyCarb)
+            binding.carbsValueText.text = "%.2f g".format(itemCarbs)
             setProgressBar(binding.carbsProgressBar, carbsPercentage)
             binding.carbsPercentText.text = "${carbsPercentage}%"
 
             val fatPercentage = calculatePercentage(itemFat, days * dailyFat)
-            binding.fatValueText.text = "%.2f kcal".format(itemFat)
+            binding.fatValueText.text = "%.2f g".format(itemFat)
             setProgressBar(binding.fatProgressBar, fatPercentage)
             binding.fatPercentText.text = "${fatPercentage}%"
 
             val proteinPercentage = calculatePercentage(itemProtein, days * dailyProtein)
-            binding.proteinValueText.text = "%.2f kcal".format(itemProtein)
+            binding.proteinValueText.text = "%.2f g".format(itemProtein)
             setProgressBar(binding.proteinProgressBar, proteinPercentage)
             binding.proteinPercentText.text = "${proteinPercentage}%"
 
             val fiberPercentage = calculatePercentage(itemFiber, days * dailyFiber)
-            binding.fiberValueText.text = "%.2f kcal".format(itemFiber)
+            binding.fiberValueText.text = "%.2f g".format(itemFiber)
             setProgressBar(binding.fiberProgressBar, fiberPercentage)
             binding.fiberPercentText.text = "${fiberPercentage}%"
 
             val potassiumPercentage = calculatePercentage(itemPotassium, days * dailyPotassium)
-            binding.potassiumValueText.text = "%.2f kcal".format(itemPotassium)
+            binding.potassiumValueText.text = "%.2f mg".format(itemPotassium)
             setProgressBar(binding.potassiumProgressBar, potassiumPercentage)
             binding.potassiumPercentText.text = "${potassiumPercentage}%"
 
             val calciumPercentage = calculatePercentage(itemCalcium, days * dailyCalcium)
-            binding.calciumValueText.text = "%.2f kcal".format(itemCalcium)
+            binding.calciumValueText.text = "%.2f mg".format(itemCalcium)
             setProgressBar(binding.calciumProgressBar, calciumPercentage)
             binding.calciumPercentText.text = "${calciumPercentage}%"
 
             val ironPercentage = calculatePercentage(itemIron, days * dailyIron)
-            binding.ironValueText.text = "%.2f kcal".format(itemIron)
+            binding.ironValueText.text = "%.2f mg".format(itemIron)
             setProgressBar(binding.ironProgressBar, ironPercentage)
             binding.ironPercentText.text = "${ironPercentage}%"
 
             val folatePercentage = calculatePercentage(itemFolate, days * dailyFolate)
-            binding.folateValueText.text = "%.2f kcal".format(itemFolate)
+            binding.folateValueText.text = "%.2f ug".format(itemFolate)
             setProgressBar(binding.folateProgressBar, folatePercentage)
             binding.folatePercentText.text = "${folatePercentage}%"
 
             val vitaminDPercentage = calculatePercentage(itemVitaminD, days * dailyVitaminD)
-            binding.vitaminDValueText.text = "%.2f kcal".format(itemVitaminD)
+            binding.vitaminDValueText.text = "%.2f ug".format(itemVitaminD)
             setProgressBar(binding.vitaminDProgressBar, vitaminDPercentage)
             binding.vitaminDPercentText.text = "${vitaminDPercentage}%"
 
@@ -152,20 +170,21 @@ class NutritionFragment : Fragment() {
     }
 
     private fun setProgressBar(progressBar: ProgressBar, percentage: Int) {
+        progressBar.max = 100
         progressBar.progress = percentage
 
-        // Change the progress bar color based on the percentage
-        var color = R.color.green
-
-        if (percentage < 50)
-        {
-            color = R.color.red
-        } else if (percentage < 80) {
-            color = R.color.yellow
+        // Set color
+        val color = when {
+            percentage < 50 -> requireContext().getColor(R.color.red)
+            percentage < 80 -> requireContext().getColor(R.color.yellow)
+            else -> requireContext().getColor(R.color.green)
         }
 
-        progressBar.progressDrawable.setTint(requireContext().getColor(color))
-        val drawable = progressBar.progressDrawable.mutate()
+        val drawable = progressBar.progressDrawable.mutate() as LayerDrawable
+
+        val progressLayer = drawable.findDrawableByLayerId(android.R.id.progress)
+        progressLayer?.setTint(color)
+
         progressBar.progressDrawable = drawable
     }
 
