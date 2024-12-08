@@ -1,9 +1,13 @@
 package com.cs407.grocerease.ui.recommendations
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.cs407.grocerease.R
@@ -14,28 +18,121 @@ class RecommendationsFragment : Fragment() {
     private var _binding: FragmentRecommendationsBinding? = null
     private val binding get() = _binding!!
 
+    // SharedPreferences keys
+    private val sharedPrefs = "GroceryListPrefs"
+    private val currentListItemsShared = "CurrentListItems"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRecommendationsBinding.inflate(inflater, container, false)
 
+        // Load and display recommendations
+        loadRecommendations()
+
         // Handle button clicks
         binding.frRecipesButton.setOnClickListener {
-            // Navigate to RecipesFragment using NavController
             findNavController().navigate(R.id.navigation_recs)
         }
 
         binding.frNutritionButton.setOnClickListener {
-            // Navigate to NutritionFragment using NavController
             findNavController().navigate(R.id.nutritionFragment)
         }
 
         return binding.root
     }
 
-    override fun onDestroyView() {
+    private fun loadRecommendations() {
+        val sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
+        val combinedList = sharedPreferences.getString(currentListItemsShared, null)
+
+        // Target the LinearLayout inside the ScrollView
+        val recipesContainer = binding.root.findViewById<LinearLayout>(R.id.recipesContainer)
+        val favoritesContainer = binding.root.findViewById<LinearLayout>(R.id.favoritesContainer)
+        recipesContainer.removeAllViews()
+
+        // Example recipe data with ingredients
+        val recipes = mapOf(
+            "Spaghetti Carbonara" to listOf("pasta", "egg", "cheese"),
+            "Chicken Alfredo" to listOf("chicken", "alfredo", "pasta"),
+            "Vegetable Stir-Fry" to listOf("bell peppers", "broccoli", "soy sauce"),
+            "Spaghetti Egg" to listOf("pasta", "egg", "keese"),
+            "Egg Carbonara" to listOf("egg", "egg", "cheese"),
+            "Egg egg" to listOf("pasta", "egg", "egg")
+        )
+
+        if (!combinedList.isNullOrEmpty()) {
+            val items = combinedList.split(";").filter { it.isNotEmpty() }
+            val itemNames = items.map { it.split(":")[0].lowercase() } // Extract item names from sharedPreferences
+            var index = 0
+
+            for ((recipeName, recipeIngredients) in recipes) {
+                // Check if any ingredient matches the item names from SharedPreferences
+                if (recipeIngredients.any { ingredient -> itemNames.contains(ingredient.lowercase()) }) {
+                    // Create and add a view for each matching recipe
+                    val recipeView = LayoutInflater.from(context)
+                        .inflate(R.layout.recommendation_item_view, recipesContainer, false)
+
+                    val titleTextView = recipeView.findViewById<TextView>(R.id.recommendationTitle)
+                    val descriptionTextView = recipeView.findViewById<TextView>(R.id.recommendationDescription)
+                    val addToFavoritesButton = recipeView.findViewById<Button>(R.id.addToFavoritesButton)
+
+                    // Set the text for the recipe
+                    titleTextView.text = recipeName
+                    descriptionTextView.text = "Ingredients: ${recipeIngredients.joinToString(", ")}"
+
+                    val backgroundColor = if (index % 2 == 0) {
+                        resources.getColor(android.R.color.holo_blue_light, null) // Dark gray for even index
+                    } else {
+                        resources.getColor(android.R.color.holo_purple, null) // White for odd index
+                    }
+                    recipeView.setBackgroundColor(backgroundColor)
+
+                    // Handle adding to favorites
+                    addToFavoritesButton.setOnClickListener {
+                        val favoriteView = LayoutInflater.from(context)
+                            .inflate(R.layout.recommendation_item_view, favoritesContainer, false)
+
+                        val favoriteTitleTextView =
+                            favoriteView.findViewById<TextView>(R.id.recommendationTitle)
+                        val favoriteDescriptionTextView =
+                            favoriteView.findViewById<TextView>(R.id.recommendationDescription)
+                        val removeButton = favoriteView.findViewById<Button>(R.id.addToFavoritesButton)
+
+                        favoriteTitleTextView.text = recipeName
+                        favoriteDescriptionTextView.text =
+                            "Ingredients: ${recipeIngredients.joinToString(", ")}"
+                        removeButton.setBackgroundResource(R.drawable.ic_delete_symbol)
+
+                        // Handle removing from favorites
+                        removeButton.setOnClickListener {
+                            favoritesContainer.removeView(favoriteView)
+                        }
+
+                        favoritesContainer.addView(favoriteView)
+                    }
+
+                    // Add the recipe block to the container
+                    recipesContainer.addView(recipeView)
+                    index++
+                }
+            }
+        } else {
+            // Show a message if no data is available
+            val noDataMessage = TextView(requireContext()).apply {
+                text = "No recommendations available. Add items to your grocery list."
+                textSize = 16f
+                setPadding(16, 16, 16, 16)
+            }
+            recipesContainer.addView(noDataMessage)
+        }
+    }
+
+        override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+    data class Recipe(val name: String, val ingredients: List<String>, val instructions: String)
 }
