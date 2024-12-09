@@ -18,6 +18,7 @@
     <string name="addBlogSuggestion">Add Blog</string>
     <string name="username_text">Username</string>
     <string name="weight_text">Weight (lbs)</string>
+    <string name="profilebutton">ProfileButton</string>
     <string-array name="gender_options">
         <item>Male</item>
         <item>Female</item>

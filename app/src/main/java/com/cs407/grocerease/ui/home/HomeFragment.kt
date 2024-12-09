@@ -62,12 +62,6 @@ class HomeFragment : Fragment() {
         binding.blogContainer.adapter = blogAdapter
 
         val addBlogButton = root.findViewById<ImageView>(R.id.addBlogButton)
-        val editProfile = root.findViewById<ImageView>(R.id.editProfile)
-
-        editProfile.setOnClickListener {
-            val intent = Intent(requireContext(), AccountActivity::class.java)
-            startActivity(intent)
-        }
 
         addBlogButton.setOnClickListener {
             addBlogPopup()

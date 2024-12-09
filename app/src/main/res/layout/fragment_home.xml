@@ -42,19 +42,9 @@
 
     <ImageView
         android:id="@+id/addBlogButton"
+        android:background="@color/green"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:layout_marginStart="325dp"
-        android:layout_marginTop="645dp"
-        android:contentDescription="Add Item Button"
-        android:src="@drawable/plussymbol"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/editProfile"
-        android:layout_width="0dp"
-        android:layout_height="175dp"
         android:layout_marginStart="325dp"
         android:layout_marginTop="645dp"
         android:contentDescription="Add Item Button"
