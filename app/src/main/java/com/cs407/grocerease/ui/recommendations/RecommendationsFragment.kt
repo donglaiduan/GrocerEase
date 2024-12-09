@@ -113,7 +113,6 @@ class RecommendationsFragment : Fragment() {
                         removeButton.setBackgroundResource(R.drawable.ic_delete_symbol)
                         // Handle removing from favorites
                         removeButton.setOnClickListener {
-                            Log.d("RemoveFavoriteRecipe","Clicked")
                             favoritesContainer.removeView(favoriteView)
                             saveRecipeToFavoritesSharedPreferences()
                         }
@@ -142,14 +141,14 @@ class RecommendationsFragment : Fragment() {
         val favoritesContainer = binding.root.findViewById<LinearLayout>(R.id.favoritesContainer)
         var currentFavorites = ""
         favoritesContainer.forEach { view->
-            Log.d("SavingRecipes",view.findViewById<TextView>(R.id.recommendationTitle).text.toString())
+            //Log.d("SavingRecipes",view.findViewById<TextView>(R.id.recommendationTitle).text.toString())
                 val favoriteTitleTextView =
                     view.findViewById<TextView>(R.id.recommendationTitle).text.toString()
                 val favoriteDescriptionTextView =
                     view.findViewById<TextView>(R.id.recommendationDescription).text.toString()
                 currentFavorites = currentFavorites.plus("$favoriteTitleTextView;$favoriteDescriptionTextView|")
         }
-        Log.d("SavingRecipes",currentFavorites)
+        //Log.d("SavingRecipes",currentFavorites)
         sharedPreferences.edit().putString("currentFavoriteRecipes", currentFavorites).apply()
     }
     private fun loadRecipesFromFavoritesSharedPreferences(){
@@ -161,7 +160,7 @@ class RecommendationsFragment : Fragment() {
                 Log.d("SavedRecipes", "Error Blank Recipe")
             }
             else {
-                Log.d("SavedRecipes", recipe)
+                //Log.d("SavedRecipes", recipe)
                 val recipeInfo = recipe.split(";")
                 val recipeName = recipeInfo[0]
                 val recipeIngredients = recipeInfo[1]
@@ -189,11 +188,6 @@ class RecommendationsFragment : Fragment() {
             }
         }
     }
-
-    private fun removeRecipeFromSharedPreferences(){
-
-    }
-
 
         override fun onDestroyView() {
         super.onDestroyView()
