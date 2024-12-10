@@ -27,7 +27,6 @@ class AccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.edit_profile)
 
-        // Initialize views
         emailEditText = findViewById(R.id.etEmail)
         usernameEditText = findViewById(R.id.etUsername)
         weightValueTextView = findViewById(R.id.tvWeightValue)
@@ -39,7 +38,6 @@ class AccountActivity : AppCompatActivity() {
         changePassword = findViewById(R.id.btnChangePassword)
         password = findViewById((R.id.etPassword))
 
-        // Set up the gender spinner
         ArrayAdapter.createFromResource(
             this,
             R.array.gender_options,
@@ -49,10 +47,8 @@ class AccountActivity : AppCompatActivity() {
             genderSpinner.adapter = adapter
         }
 
-        // Load user data from Firestore
         loadUserData()
 
-        // Button click listeners
         findViewById<Button>(R.id.btnDecreaseWeight).setOnClickListener { adjustWeight(-1) }
         findViewById<Button>(R.id.btnIncreaseWeight).setOnClickListener { adjustWeight(1) }
         findViewById<Button>(R.id.btnDecreaseDays).setOnClickListener { adjustDays(-1) }
@@ -63,7 +59,6 @@ class AccountActivity : AppCompatActivity() {
         }
         logOutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            // Navigate to the LoginActivity (or your app's login screen)
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
@@ -111,7 +106,6 @@ class AccountActivity : AppCompatActivity() {
                             weightValueTextView.text = "${it.weight} Pounds"
                             daysValueTextView.text = "${it.days} Days"
 
-                            // Set gender selection
                             val genderArray = resources.getStringArray(R.array.gender_options)
                             val genderIndex = genderArray.indexOf(it.gender)
                             if (genderIndex != -1) {

@@ -60,23 +60,19 @@ class NutritionFragment : Fragment() {
             displaySharedPreferenceItems()
         }
 
-        // Handle button click to navigate to another fragment
         binding.fnRecipesButton.setOnClickListener {
             findNavController().navigate(R.id.navigation_recs)
         }
 
-        // Load and display shared preference items
         displaySharedPreferenceItems()
 
         return binding.root
     }
 
     private fun displaySharedPreferenceItems() {
-        // Retrieve shared preferences
         val sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
         val combinedList = sharedPreferences.getString(currentListItemsShared, null)
 
-        //Toast.makeText(context, combinedList.toString(), Toast.LENGTH_SHORT).show()
 
         if (!combinedList.isNullOrEmpty()) {
             val items = combinedList.split(";").filter { it.isNotEmpty() }
@@ -173,7 +169,6 @@ class NutritionFragment : Fragment() {
         progressBar.max = 100
         progressBar.progress = percentage
 
-        // Set color
         val color = when {
             percentage < 50 -> requireContext().getColor(R.color.red)
             percentage < 80 -> requireContext().getColor(R.color.yellow)

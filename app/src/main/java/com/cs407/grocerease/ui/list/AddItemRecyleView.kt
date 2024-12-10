@@ -39,7 +39,7 @@ class AddItemRecycleView (
         holder.itemView.setOnClickListener {
             selectedPosition = holder.adapterPosition
             notifyDataSetChanged()
-            onSelectItem(item) // Trigger the click event
+            onSelectItem(item)
         }
         holder.infoButton.setOnClickListener {
             Log.d("InfoButton", item.toString())

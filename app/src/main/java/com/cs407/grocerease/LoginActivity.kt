@@ -37,18 +37,14 @@ class LoginActivity : AppCompatActivity() {
                     try {
                         val user = signIn(email, password)
                         if (user != null) {
-                            // User signed in successfully
                             Toast.makeText(this@LoginActivity, "Login Successful", Toast.LENGTH_SHORT).show()
 
-                            // Navigate to the next activity
                             val intent = Intent(this@LoginActivity, MainActivity::class.java)
                             startActivity(intent)
 
-                            // Finish the current activity
                             finish()
                         }
                     } catch (e: Exception) {
-                        // Handle sign-in failure
                         Log.e("failed sign in", "Sign-in error: ${e.message}")
                         Toast.makeText(this@LoginActivity, "Login failed: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
@@ -58,7 +54,6 @@ class LoginActivity : AppCompatActivity() {
 
 
         registerTextView.setOnClickListener {
-            // Navigate to the registration screen
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }

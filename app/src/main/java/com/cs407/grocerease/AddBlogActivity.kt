@@ -12,11 +12,6 @@ class AddBlogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_home)
-        val addBlogButton = findViewById<ImageView>(R.id.addBlogButton)
 
-//        addBlogButton.setOnClickListener{
-//            Toast.makeText(this, "Add Blog Button Clicked!", Toast.LENGTH_SHORT).show()
-//            Log.d("Blog Button", "Add Blog Button Clicked!")
-//        }
     }
 }

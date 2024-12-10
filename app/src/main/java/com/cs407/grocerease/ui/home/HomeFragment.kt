@@ -36,8 +36,6 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -56,7 +54,6 @@ class HomeFragment : Fragment() {
             textView.text = it
         }
 
-        // Initialize the RecyclerView and adapter
         blogAdapter = BlogAdapter(blogList)
         binding.blogContainer.layoutManager = LinearLayoutManager(requireContext())
         binding.blogContainer.adapter = blogAdapter
@@ -95,7 +92,6 @@ class HomeFragment : Fragment() {
         dialog.show()
 
         uploadImageButton.setOnClickListener {
-            // Open image picker
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, REQUEST_CODE_IMAGE_PICK)
         }
@@ -118,7 +114,6 @@ class HomeFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_IMAGE_PICK && resultCode == Activity.RESULT_OK) {
             selectedImageUri = data?.data
-            // Update the image view with the selected image
             val imageView = dialogView?.findViewById<ImageView>(R.id.image_view)
             imageView?.setImageURI(selectedImageUri)
         }
@@ -129,14 +124,12 @@ class HomeFragment : Fragment() {
         val db = FirebaseFirestore.getInstance()
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-        // Add some validation
         if (title.isEmpty() || body.isEmpty()) {
             Toast.makeText(requireContext(), "Title and body cannot be empty", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (userId != null) {
-            // Fetch the username before proceeding
             db.collection("users").document(userId).get()
                 .addOnSuccessListener { document ->
                     val username = if (document.exists()) {
@@ -144,9 +137,7 @@ class HomeFragment : Fragment() {
                     } else {
                         "Anonymous"
                     }
-                    Log.d("username", username) // Ensure we log the correct username
 
-                    // Create the blog object with the fetched username
                     val blog = Blog(
                         username = username,
                         title = title,
@@ -155,10 +146,8 @@ class HomeFragment : Fragment() {
                         timestamp = System.currentTimeMillis()
                     )
 
-                    // Upload the blog to Firestore
                     db.collection("blogs").add(blog)
                         .addOnSuccessListener { documentReference ->
-                            // If an image URI is provided, upload the image
                             imageUri?.let { uri ->
                                 val filename = "${currentUser?.uid}_${System.currentTimeMillis()}.jpg"
                                 val storageRef = FirebaseStorage.getInstance().reference.child("blog_images/$filename")
@@ -166,7 +155,6 @@ class HomeFragment : Fragment() {
                                 storageRef.putFile(uri)
                                     .addOnSuccessListener { taskSnapshot ->
                                         taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUrl ->
-                                            // Update the blog's URL field with the image URL
                                             val updatedBlog = blog.copy(url = downloadUrl.toString())
                                             db.collection("blogs").document(documentReference.id).set(updatedBlog)
                                                 .addOnCompleteListener {
@@ -180,7 +168,6 @@ class HomeFragment : Fragment() {
                                         Toast.makeText(requireContext(), "Failed to upload image", Toast.LENGTH_SHORT).show()
                                     }
                             } ?: run {
-                                // If no image was selected, just refresh blogs
                                 Toast.makeText(requireContext(), "Blog uploaded successfully!", Toast.LENGTH_SHORT).show()
                                 fetchBlogs()
                             }

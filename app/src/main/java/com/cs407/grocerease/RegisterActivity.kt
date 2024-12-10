@@ -25,7 +25,6 @@ class RegisterActivity : AppCompatActivity() {
         val loginTextView = findViewById<TextView>(R.id.loginTextView)
         val usernameEdit = findViewById<EditText>(R.id.usernameEdit)
 
-        // Set up the Spinner for gender selection
         val genderOptions = arrayOf("Select Gender", "Male", "Female", "Other")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, genderOptions)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -43,7 +42,6 @@ class RegisterActivity : AppCompatActivity() {
                 signUp(email, password, username, weight.toInt(), selectedGender)
                 Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show()
 
-                // Navigate to the next activity
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -51,7 +49,6 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         loginTextView.setOnClickListener {
-            // Navigate to the login screen
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
@@ -60,12 +57,10 @@ class RegisterActivity : AppCompatActivity() {
 
 private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-// Sign Up
 fun signUp(email: String, password: String, username: String, weight: Int, selectedGender: String) {
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // User registered successfully
                 val db = FirebaseFirestore.getInstance()
                 val user = auth.currentUser
 
@@ -90,7 +85,6 @@ fun signUp(email: String, password: String, username: String, weight: Int, selec
 
                 println("User signed up: ${user?.email}")
             } else {
-                // Sign-up failed
                 println("Sign-up error: ${task.exception?.message}")
             }
         }

@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- Account Information Label -->
     <TextView
         android:id="@+id/tvAccountInfo"
         android:layout_width="wrap_content"
@@ -19,7 +18,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
-    <!-- Email Field -->
     <TextView
         android:id="@+id/tvEmail"
         android:layout_width="0dp"
@@ -42,7 +40,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvEmail" />
 
-    <!-- Username Field -->
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="0dp"
@@ -64,17 +61,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvUsername" />
 
-<!--    <Button-->
-<!--        android:id="@+id/btnRandomizeUsername"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Randomize Username"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/etUsername"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:layout_marginTop="8dp" />-->
-
-    <!-- Password Field -->
     <TextView
         android:id="@+id/tvPassword"
         android:layout_width="0dp"
@@ -97,7 +83,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvPassword" />
 
-    <!-- Change Password Button -->
     <Button
         android:id="@+id/btnChangePassword"
         android:layout_width="wrap_content"
@@ -108,7 +93,6 @@
         app:layout_constraintTop_toBottomOf="@id/etPassword"
         android:layout_marginTop="8dp" />
 
-    <!-- Gender Field -->
     <TextView
         android:id="@+id/tvGender"
         android:layout_width="0dp"
@@ -128,7 +112,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvGender" />
 
-    <!-- Current Weight -->
     <TextView
         android:id="@+id/tvWeight"
         android:layout_width="0dp"
@@ -170,7 +153,6 @@
             android:text="+" />
     </LinearLayout>
 
-    <!-- Day Recommendations -->
     <TextView
         android:id="@+id/tvDays"
         android:layout_width="0dp"
@@ -212,7 +194,6 @@
             android:text="+" />
     </LinearLayout>
 
-    <!-- Action Buttons -->
     <LinearLayout
         android:id="@+id/layoutButtons"
         android:layout_width="0dp"

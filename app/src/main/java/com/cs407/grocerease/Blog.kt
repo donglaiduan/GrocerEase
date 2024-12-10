@@ -24,22 +24,3 @@ data class User(
     constructor() : this("", "", "", 0, 0, 7, "")
 }
 
-
-fun fetchAllBlogs(
-    onSuccess: (List<Blog>) -> Unit,
-    onFailure: (Exception) -> Unit
-) {
-    val db = FirebaseFirestore.getInstance() // Firestore instance
-    val blogCollection = db.collection("blogs") // Reference to the "blog" collection
-
-    // Fetch all blogs
-    blogCollection.get()
-        .addOnSuccessListener { documents ->
-            // Map documents to Blog objects
-            val blogs = documents.mapNotNull { it.toObject(Blog::class.java) }
-            onSuccess(blogs) // Return the list of blogs
-        }
-        .addOnFailureListener { exception ->
-            onFailure(exception) // Handle the failure
-        }
-}
