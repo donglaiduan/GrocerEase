@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.allViews
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
@@ -97,29 +98,37 @@ class RecommendationsFragment : Fragment() {
 
                     // Handle adding to favorites
                     addToFavoritesButton.setOnClickListener {
-                        val favoriteView = LayoutInflater.from(context)
-                            .inflate(R.layout.recommendation_item_view, favoritesContainer, false)
+                        val recipes = sharedPreferences.getString("currentFavoriteRecipes", "")
+                        if(!recipes.isNullOrEmpty() && recipes.contains("${titleTextView.text};${descriptionTextView.text}")){
+                            //Log.d("FavoriteRecipe", "Duplicate Found")
+                            Toast.makeText(requireContext(), "Error, Duplicate Found", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            val favoriteView = LayoutInflater.from(context)
+                                .inflate(R.layout.recommendation_item_view, favoritesContainer, false)
 
-                        val favoriteTitleTextView =
-                            favoriteView.findViewById<TextView>(R.id.recommendationTitle)
-                        val favoriteDescriptionTextView =
-                            favoriteView.findViewById<TextView>(R.id.recommendationDescription)
-                        val removeButton = favoriteView.findViewById<Button>(R.id.addToFavoritesButton)
+                            val favoriteTitleTextView =
+                                favoriteView.findViewById<TextView>(R.id.recommendationTitle)
+                            val favoriteDescriptionTextView =
+                                favoriteView.findViewById<TextView>(R.id.recommendationDescription)
+                            val removeButton = favoriteView.findViewById<Button>(R.id.addToFavoritesButton)
 
-                        favoriteTitleTextView.text = recipeName
-                        favoriteDescriptionTextView.text =
-                            "Ingredients: ${recipeIngredients.joinToString(", ")}"
+                            favoriteTitleTextView.text = recipeName
+                            favoriteDescriptionTextView.text =
+                                "Ingredients: ${recipeIngredients.joinToString(", ")}"
 
-                        removeButton.setBackgroundResource(R.drawable.ic_delete_symbol)
-                        // Handle removing from favorites
-                        removeButton.setOnClickListener {
-                            favoritesContainer.removeView(favoriteView)
+                            removeButton.setBackgroundResource(R.drawable.ic_delete_symbol)
+                            // Handle removing from favorites
+                            removeButton.setOnClickListener {
+                                favoritesContainer.removeView(favoriteView)
+                                saveRecipeToFavoritesSharedPreferences()
+                            }
+
+                            favoritesContainer.addView(favoriteView)
                             saveRecipeToFavoritesSharedPreferences()
                         }
-
-                        favoritesContainer.addView(favoriteView)
-                        saveRecipeToFavoritesSharedPreferences()
                     }
+
                     // Add the recipe block to the container
                     recipesContainer.addView(recipeView)
                     index++
@@ -149,6 +158,7 @@ class RecommendationsFragment : Fragment() {
         }
         sharedPreferences.edit().putString("currentFavoriteRecipes", currentFavorites).apply()
     }
+
     private fun loadRecipesFromFavoritesSharedPreferences(){
         val sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
         val savedFavoriteRecipes = sharedPreferences.getString("currentFavoriteRecipes","")
