@@ -8,28 +8,35 @@
     tools:context=".ui.recommendations.RecommendationsFragment">
 
     <!-- Recipes Button -->
+
+    <!-- Nutrition Button -->
+
+    <!-- Recipes Title -->
+
     <Button
         android:id="@+id/frRecipesButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:text="Recipes"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.298"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/frNutritionButton" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Nutrition Button -->
     <Button
         android:id="@+id/frNutritionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="95dp"
         android:text="Nutrition"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/frRecipesButton"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Recipes Title -->
     <TextView
         android:id="@+id/recipesTitle"
         android:layout_width="wrap_content"
@@ -95,14 +102,5 @@
     </ScrollView>
 
     <!-- View All Favorites Button -->
-    <Button
-        android:id="@+id/favViewAllButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="View All"
-        app:layout_constraintTop_toBottomOf="@+id/favoritesScrollView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
