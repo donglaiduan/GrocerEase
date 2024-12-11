@@ -86,13 +86,13 @@
     <!-- Favorites ScrollView -->
     <ScrollView
         android:id="@+id/favoritesScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_width="405dp"
+        android:layout_height="280dp"
         android:layout_marginTop="8dp"
         android:background="#f0f0f0"
-        app:layout_constraintTop_toBottomOf="@+id/favoritesTitle"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/favoritesTitle">
 
         <LinearLayout
             android:id="@+id/favoritesContainer"

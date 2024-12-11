@@ -30,10 +30,11 @@
     </LinearLayout>
 
     <!-- Add to Favorites Button -->
-    <Button
+    <ImageButton
         android:id="@+id/addToFavoritesButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center_vertical"
-        android:background="@android:drawable/ic_input_add" />
+        android:background="@color/green"
+        android:contentDescription="Plus Symbol" />
 </LinearLayout>
