@@ -80,6 +80,29 @@ class NutritionFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume(){
+        super.onResume()
+        val db = FirebaseFirestore.getInstance()
+
+        if (userID != null) {
+            db.collection("users").document(userID).get()
+                .addOnSuccessListener { document ->
+                    days = (document.getLong("days")?.toInt() ?: 7)
+                    weight = (document.getLong("weight")?.toInt() ?: 160)
+                    gender = (document.getString("gender") ?: "other")
+                    age = (document.getLong("age")?.toInt() ?: 20)
+                    height = (document.getLong("height")?.toInt() ?: 70)
+
+                    displaySharedPreferenceItems()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context, "Failed to fetch days or weight.", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            displaySharedPreferenceItems()
+        }
+    }
+
     private fun calculateDailyNeeds(){
         val weightKG = weight * 0.453592;
         val heightCM = height * 2.54;
@@ -99,7 +122,7 @@ class NutritionFragment : Fragment() {
         } else if(gender == "female") {
             dailyCal = (9.99 * weightKG) + (6.25 * heightCM) - (4.92 * age) - 161;
             dailyCarb = (dailyCal * .5) / 4;
-            dailyFat = (dailyFat * .35) / 9;
+            dailyFat = (dailyCal * .35) / 9;
             dailyProtein = (dailyCal * .15) / 4;
             dailyFiber = 28.0;
             dailyPotassium = 4700.0;
@@ -110,7 +133,7 @@ class NutritionFragment : Fragment() {
         } else {
             dailyCal = (9.99 * weightKG) + (6.25 * heightCM) - (4.92 * age) - 83;
             dailyCarb = (dailyCal * .5) / 4;
-            dailyFat = (dailyFat * .35) / 9;
+            dailyFat = (dailyCal * .35) / 9;
             dailyProtein = (dailyCal * .15) / 4;
             dailyFiber = 30.8;
             dailyPotassium = 4700.0;
@@ -210,7 +233,7 @@ class NutritionFragment : Fragment() {
             binding.totalDaysText.text = days.toString()
 
         } else {
-            Toast.makeText(context, "No items found in the list.", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, "No items found in the list.", Toast.LENGTH_SHORT).show()
         }
     }
 

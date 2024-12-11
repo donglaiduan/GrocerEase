@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -25,7 +26,7 @@ class RecommendationsFragment : Fragment() {
     // SharedPreferences keys
     private val sharedPrefs = "GroceryListPrefs"
     private val currentListItemsShared = "CurrentListItems"
-
+    private var listIngredients = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,9 +51,27 @@ class RecommendationsFragment : Fragment() {
         return binding.root
     }
 
+    private fun loadIngredients() {
+        val sharedPreferences =
+            requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
+        val combinedList = sharedPreferences.getString(currentListItemsShared, null)
+        Log.d("combinedList", combinedList.toString())
+        if (!combinedList.isNullOrEmpty()) {
+            val items = combinedList.split(";").filter { it.isNotEmpty() }
+            val itemNames = items.map { it.split(":")[1].lowercase() }
+            itemNames.forEach { item ->
+                Log.d("Ingredient", item)
+                listIngredients = listIngredients.plus("${item.lowercase()},")
+            }
+        }
+        Log.d("Ingredients List", listIngredients)
+
+    }
+
     private fun loadRecommendations() {
         val sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
         val combinedList = sharedPreferences.getString(currentListItemsShared, null)
+        loadIngredients()
 
         // Target the LinearLayout inside the ScrollView
         val recipesContainer = binding.root.findViewById<LinearLayout>(R.id.recipesContainer)
@@ -70,32 +89,31 @@ class RecommendationsFragment : Fragment() {
         )
 
         if (!combinedList.isNullOrEmpty()) {
-            val items = combinedList.split(";").filter { it.isNotEmpty() }
-            val itemNames = items.map { it.split(":")[0].lowercase() } // Extract item names from sharedPreferences
             var index = 0
-
             for ((recipeName, recipeIngredients) in recipes) {
                 // Check if any ingredient matches the item names from SharedPreferences
-                if (recipeIngredients.any { ingredient -> itemNames.contains(ingredient.lowercase()) }) {
+                if (recipeIngredients.any { ingredient ->
+                        //Log.d("List Ingredients", listIngredients)
+                    listIngredients.contains(ingredient.lowercase()) }) {
                     // Create and add a view for each matching recipe
                     val recipeView = LayoutInflater.from(context)
                         .inflate(R.layout.recommendation_item_view, recipesContainer, false)
 
                     val titleTextView = recipeView.findViewById<TextView>(R.id.recommendationTitle)
                     val descriptionTextView = recipeView.findViewById<TextView>(R.id.recommendationDescription)
-                    val addToFavoritesButton = recipeView.findViewById<Button>(R.id.addToFavoritesButton)
-
+                    val addToFavoritesButton = recipeView.findViewById<ImageView>(R.id.addToFavoritesButton)
                     // Set the text for the recipe
                     titleTextView.text = recipeName
                     descriptionTextView.text = "Ingredients: ${recipeIngredients.joinToString(", ")}"
 
                     val backgroundColor = if (index % 2 == 0) {
-                        resources.getColor(android.R.color.holo_blue_light, null) // Dark gray for even index
+                        resources.getColor(R.color.green, null) // Dark gray for even index
                     } else {
-                        resources.getColor(android.R.color.holo_purple, null) // White for odd index
+                        resources.getColor(R.color.light_green, null) // White for odd index
                     }
                     recipeView.setBackgroundColor(backgroundColor)
-
+                    addToFavoritesButton.setImageDrawable(resources.getDrawable(R.drawable.baseline_add_24))
+                    addToFavoritesButton.setBackgroundColor(backgroundColor)
                     // Handle adding to favorites
                     addToFavoritesButton.setOnClickListener {
                         val recipes = sharedPreferences.getString("currentFavoriteRecipes", "")
@@ -111,7 +129,7 @@ class RecommendationsFragment : Fragment() {
                                 favoriteView.findViewById<TextView>(R.id.recommendationTitle)
                             val favoriteDescriptionTextView =
                                 favoriteView.findViewById<TextView>(R.id.recommendationDescription)
-                            val removeButton = favoriteView.findViewById<Button>(R.id.addToFavoritesButton)
+                            val removeButton = favoriteView.findViewById<ImageView>(R.id.addToFavoritesButton)
 
                             favoriteTitleTextView.text = recipeName
                             favoriteDescriptionTextView.text =
@@ -179,7 +197,7 @@ class RecommendationsFragment : Fragment() {
                     favoriteView.findViewById<TextView>(R.id.recommendationTitle)
                 val favoriteDescriptionTextView =
                     favoriteView.findViewById<TextView>(R.id.recommendationDescription)
-                val removeButton = favoriteView.findViewById<Button>(R.id.addToFavoritesButton)
+                val removeButton = favoriteView.findViewById<ImageView>(R.id.addToFavoritesButton)
 
                 favoriteTitleTextView.text = recipeName
                 favoriteDescriptionTextView.text = recipeIngredients
