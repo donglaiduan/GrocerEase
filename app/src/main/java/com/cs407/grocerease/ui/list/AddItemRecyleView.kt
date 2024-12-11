@@ -45,8 +45,17 @@ class AddItemRecycleView (
             Log.d("InfoButton", item.toString())
             description.text =
                 item.description + "\n" +
-                        "Nutrient Values are per 100g\n" +
-                        item.toString()
+                "Nutrient Values are per 100g\n" +
+                "Calories: ${item.calories} ${item.caloriesUnit}\n" +
+                "Carbs: ${item.carbs} ${item.carbsUnit}\n" +
+                "Fat: ${item.fat} ${item.fatUnit}\n" +
+                "Protein: ${item.protein} ${item.proteinUnit}\n" +
+                "Fiber: ${item.fiber} ${item.fiberUnit}\n" +
+                "Potassium: ${item.potassium} ${item.potassiumUnit}\n" +
+                "Calcium: ${item.calcium} ${item.calciumUnit}\n" +
+                "Iron: ${item.iron} ${item.ironUnit}\n" +
+                "Folate: ${item.folate} ${item.folateUnit}\n" +
+                "Vitamin D: ${item.vitaminD} ${item.vitaminDUnit}\n"
 
         }
     }

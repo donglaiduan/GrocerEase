@@ -28,16 +28,16 @@ class NutritionFragment : Fragment() {
     private val userID = FirebaseAuth.getInstance().currentUser?.uid
 
     private var days = 0;
-    private val dailyCal = 2000.0;
-    private val dailyCarb = 275.0;
-    private val dailyFat = 78.0;
-    private val dailyProtein = 50.0;
-    private val dailyFiber = 28.0;
-    private val dailyPotassium = 4700.0;
-    private val dailyCalcium = 1300.0;
-    private val dailyIron = 18.0;
-    private val dailyFolate = 400.0;
-    private val dailyVitaminD = 20.0;
+    private var dailyCal = 2000.0;
+    private var dailyCarb = 275.0;
+    private var dailyFat = 78.0;
+    private var dailyProtein = 50.0;
+    private var dailyFiber = 28.0;
+    private var dailyPotassium = 4700.0;
+    private var dailyCalcium = 1300.0;
+    private var dailyIron = 18.0;
+    private var dailyFolate = 400.0;
+    private var dailyVitaminD = 20.0;
 
 
     override fun onCreateView(
