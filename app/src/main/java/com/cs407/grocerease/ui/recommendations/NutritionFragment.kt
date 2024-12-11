@@ -3,6 +3,7 @@ package com.cs407.grocerease.ui.recommendations
 import android.content.Context
 import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,8 +71,6 @@ class NutritionFragment : Fragment() {
             displaySharedPreferenceItems()
         }
 
-        calculateDailyNeeds()
-
         binding.fnRecipesButton.setOnClickListener {
             findNavController().navigate(R.id.navigation_recs)
         }
@@ -87,8 +86,9 @@ class NutritionFragment : Fragment() {
 
         if(gender == "Male") {
             dailyCal = (9.99 * weightKG) + (6.25 * heightCM) - (4.92 * age) + 5;
+            Log.d("dailyCalCaluculations", dailyCal.toString())
             dailyCarb = (dailyCal * .5) / 4;
-            dailyFat = (dailyFat * .35) / 9;
+            dailyFat = (dailyCal * .35) / 9;
             dailyProtein = (dailyCal * .15) / 4;
             dailyFiber = 33.6;
             dailyPotassium = 4700.0;
@@ -125,6 +125,7 @@ class NutritionFragment : Fragment() {
         val sharedPreferences = requireContext().getSharedPreferences(sharedPrefs, Context.MODE_PRIVATE)
         val combinedList = sharedPreferences.getString(currentListItemsShared, null)
 
+        calculateDailyNeeds()
 
         if (!combinedList.isNullOrEmpty()) {
             val items = combinedList.split(";").filter { it.isNotEmpty() }
