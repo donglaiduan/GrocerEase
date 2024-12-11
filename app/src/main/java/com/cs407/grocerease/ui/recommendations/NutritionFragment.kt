@@ -99,7 +99,7 @@ class NutritionFragment : Fragment() {
         } else if(gender == "female") {
             dailyCal = (9.99 * weightKG) + (6.25 * heightCM) - (4.92 * age) - 161;
             dailyCarb = (dailyCal * .5) / 4;
-            dailyFat = (dailyFat * .35) / 9;
+            dailyFat = (dailyCal * .35) / 9;
             dailyProtein = (dailyCal * .15) / 4;
             dailyFiber = 28.0;
             dailyPotassium = 4700.0;
@@ -110,7 +110,7 @@ class NutritionFragment : Fragment() {
         } else {
             dailyCal = (9.99 * weightKG) + (6.25 * heightCM) - (4.92 * age) - 83;
             dailyCarb = (dailyCal * .5) / 4;
-            dailyFat = (dailyFat * .35) / 9;
+            dailyFat = (dailyCal * .35) / 9;
             dailyProtein = (dailyCal * .15) / 4;
             dailyFiber = 30.8;
             dailyPotassium = 4700.0;
