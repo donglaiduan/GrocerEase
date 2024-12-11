@@ -49,6 +49,22 @@
         android:inputType="numberDecimal"
         android:layout_marginBottom="16dp" />
 
+    <EditText
+        android:id="@+id/heightEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/height_text"
+        android:inputType="number"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/ageEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/age_text"
+        android:inputType="number"
+        android:layout_marginBottom="16dp" />
+
     <Spinner
         android:id="@+id/genderSpinner"
         android:layout_width="match_parent"

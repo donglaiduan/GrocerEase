@@ -24,6 +24,8 @@ class RegisterActivity : AppCompatActivity() {
         val registerButton = findViewById<Button>(R.id.registerButton)
         val loginTextView = findViewById<TextView>(R.id.loginTextView)
         val usernameEdit = findViewById<EditText>(R.id.usernameEdit)
+        val heightEdit = findViewById<EditText>(R.id.heightEdit)
+        val ageEdit = findViewById<EditText>(R.id.ageEdit)
 
         val genderOptions = arrayOf("Select Gender", "Male", "Female", "Other")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, genderOptions)
@@ -35,18 +37,31 @@ class RegisterActivity : AppCompatActivity() {
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
             val weight = weightEditText.text.toString().trim()
+            val height = heightEdit.text.toString().trim()
+            val age = ageEdit.text.toString().trim()
             val selectedGender = genderSpinner.selectedItem.toString()
-            if (email.isEmpty() || password.isEmpty() || weight.isEmpty() || selectedGender == "Select Gender") {
+
+            if (email.isEmpty() || password.isEmpty() || weight.isEmpty() ||
+                height.isEmpty() || age.isEmpty() || selectedGender == "Select Gender") {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             } else {
-                signUp(email, password, username, weight.toInt(), selectedGender)
-                Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show()
+                try {
+                    val weightInt = weight.toInt()
+                    val heightInt = height.toInt()
+                    val ageInt = age.toInt()
 
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+                    signUp(email, password, username, weightInt, heightInt, ageInt, selectedGender)
+                    Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show()
+
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(this, "Invalid number format for weight, height, or age", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+
 
         loginTextView.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
@@ -57,7 +72,15 @@ class RegisterActivity : AppCompatActivity() {
 
 private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-fun signUp(email: String, password: String, username: String, weight: Int, selectedGender: String) {
+fun signUp(
+    email: String,
+    password: String,
+    username: String,
+    weight: Int,
+    height: Int,
+    age: Int,
+    selectedGender: String
+) {
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -69,11 +92,13 @@ fun signUp(email: String, password: String, username: String, weight: Int, selec
                     userId = userId,
                     username = username,
                     email = email,
-                    weight = weight.toInt(),
+                    weight = weight,
+                    height = height,
+                    age = age,
                     days = 7,
                     gender = selectedGender
                 )
-                if(userId != null) {
+                if (userId != null) {
                     db.collection("users").document(userId).set(currUser)
                         .addOnSuccessListener {
                             println("User details saved successfully!")
