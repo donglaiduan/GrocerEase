@@ -29,8 +29,8 @@
         tools:layout="@layout/fragment_map" />
 
     <fragment
-        android:id="@+id/nutritionFragment"
+        android:id="@+id/navigation_nutrition"
         android:name="com.cs407.grocerease.ui.recommendations.NutritionFragment"
-        android:label="NutritionFragment" />
+        android:label="@string/title_nutrition" />
 
 </navigation>

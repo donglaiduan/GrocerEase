@@ -44,7 +44,7 @@ class RecommendationsFragment : Fragment() {
         }
 
         binding.frNutritionButton.setOnClickListener {
-            findNavController().navigate(R.id.nutritionFragment)
+            findNavController().navigate(R.id.navigation_nutrition)
         }
 
         return binding.root
