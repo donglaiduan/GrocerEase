@@ -28,16 +28,21 @@ class NutritionFragment : Fragment() {
     private val userID = FirebaseAuth.getInstance().currentUser?.uid
 
     private var days = 0;
-    private val dailyCal = 2000.0;
-    private val dailyCarb = 275.0;
-    private val dailyFat = 78.0;
-    private val dailyProtein = 50.0;
-    private val dailyFiber = 28.0;
-    private val dailyPotassium = 4700.0;
-    private val dailyCalcium = 1300.0;
-    private val dailyIron = 18.0;
-    private val dailyFolate = 400.0;
-    private val dailyVitaminD = 20.0;
+    private var weight = 0;
+    private var gender = "";
+    private var age = 0;
+    private var height = 0;
+
+    private var dailyCal = 2000.0;
+    private var dailyCarb = 275.0;
+    private var dailyFat = 78.0;
+    private var dailyProtein = 50.0;
+    private var dailyFiber = 28.0;
+    private var dailyPotassium = 4700.0;
+    private var dailyCalcium = 1300.0;
+    private var dailyIron = 18.0;
+    private var dailyFolate = 400.0;
+    private var dailyVitaminD = 20.0;
 
 
     override fun onCreateView(
@@ -51,14 +56,21 @@ class NutritionFragment : Fragment() {
             db.collection("users").document(userID).get()
                 .addOnSuccessListener { document ->
                     days = (document.getLong("days")?.toInt() ?: 7)
+                    weight = (document.getLong("weight")?.toInt() ?: 160)
+                    gender = (document.getString("gender") ?: "other")
+                    age = (document.getLong("age")?.toInt() ?: 20)
+                    height = (document.getLong("height")?.toInt() ?: 70)
+
                     displaySharedPreferenceItems()
                 }
                 .addOnFailureListener {
-                    Toast.makeText(context, "Failed to fetch days.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Failed to fetch days or weight.", Toast.LENGTH_SHORT).show()
                 }
         } else {
             displaySharedPreferenceItems()
         }
+
+        calculateDailyNeeds()
 
         binding.fnRecipesButton.setOnClickListener {
             findNavController().navigate(R.id.navigation_recs)
@@ -67,6 +79,46 @@ class NutritionFragment : Fragment() {
         displaySharedPreferenceItems()
 
         return binding.root
+    }
+
+    private fun calculateDailyNeeds(){
+        val weightKG = weight * 0.453592;
+        val heightCM = height * 2.54;
+
+        if(gender == "Male") {
+            dailyCal = (9.99 * weightKG) + (6.25 * heightCM) - (4.92 * age) + 5;
+            dailyCarb = (dailyCal * .5) / 4;
+            dailyFat = (dailyFat * .35) / 9;
+            dailyProtein = (dailyCal * .15) / 4;
+            dailyFiber = 33.6;
+            dailyPotassium = 4700.0;
+            dailyCalcium = 1000.0;
+            dailyIron = 8.0;
+            dailyFolate = 400.0;
+            dailyVitaminD = 12.5;
+        } else if(gender == "female") {
+            dailyCal = (9.99 * weightKG) + (6.25 * heightCM) - (4.92 * age) - 161;
+            dailyCarb = (dailyCal * .5) / 4;
+            dailyFat = (dailyFat * .35) / 9;
+            dailyProtein = (dailyCal * .15) / 4;
+            dailyFiber = 28.0;
+            dailyPotassium = 4700.0;
+            dailyCalcium = 1000.0;
+            dailyIron = 18.0;
+            dailyFolate = 400.0;
+            dailyVitaminD = 12.5;
+        } else {
+            dailyCal = (9.99 * weightKG) + (6.25 * heightCM) - (4.92 * age) - 83;
+            dailyCarb = (dailyCal * .5) / 4;
+            dailyFat = (dailyFat * .35) / 9;
+            dailyProtein = (dailyCal * .15) / 4;
+            dailyFiber = 30.8;
+            dailyPotassium = 4700.0;
+            dailyCalcium = 1000.0;
+            dailyIron = 13.0;
+            dailyFolate = 400.0;
+            dailyVitaminD = 12.5;
+        }
     }
 
     private fun displaySharedPreferenceItems() {
