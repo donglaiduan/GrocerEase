@@ -13,6 +13,8 @@
     <string name="email_text">Email</string>
     <string name="login_title">Grocerease</string>
     <string name="grocery_list">Grocery List</string>
+    <string name="height_text">Height (in inches)</string>
+    <string name="age_text">Age</string>
     <string name="info_button">Info</string>
     <string name="addItemText">Add</string>
     <string name="addBlogSuggestion">Add Blog</string>

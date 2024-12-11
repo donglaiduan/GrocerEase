@@ -13,14 +13,15 @@ data class Blog(
 }
 
 data class User(
-    val userId: String? = "", // Unique identifier for the user
-    val username: String = "",   // User's full name
-    val email: String = "",  // User's email address
-    val weight: Int = 0,
-    val age: Int? = 0,        // User's age
-    val days: Int = 7,
-    val gender: String = ""
+    val userId: String? = null,
+    val username: String,
+    val email: String,
+    val weight: Int,
+    val height: Int,
+    val age: Int,
+    val days: Int,
+    val gender: String
 ) {
-    constructor() : this("", "", "", 0, 0, 7, "")
+    constructor() : this("", "", "", 0, 0, 0, 7, "")
 }
 

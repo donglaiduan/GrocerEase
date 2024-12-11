@@ -20,6 +20,8 @@ class AccountActivity : AppCompatActivity() {
     private lateinit var logOutButton: Button
     private lateinit var changePassword: Button
     private lateinit var password: EditText
+    private lateinit var ageEdit: EditText
+    private lateinit var heightEdit: EditText
     private val db = FirebaseFirestore.getInstance()
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -37,6 +39,8 @@ class AccountActivity : AppCompatActivity() {
         logOutButton = findViewById(R.id.btnLogout)
         changePassword = findViewById(R.id.btnChangePassword)
         password = findViewById((R.id.etPassword))
+        heightEdit = findViewById(R.id.etHeight)
+        ageEdit = findViewById(R.id.etAge)
 
         ArrayAdapter.createFromResource(
             this,
@@ -94,7 +98,7 @@ class AccountActivity : AppCompatActivity() {
     }
 
     private fun loadUserData() {
-        if(userId != null ) {
+        if (userId != null) {
             Log.d("userId", userId)
             db.collection("users").document(userId).get()
                 .addOnSuccessListener { document ->
@@ -111,17 +115,20 @@ class AccountActivity : AppCompatActivity() {
                             if (genderIndex != -1) {
                                 genderSpinner.setSelection(genderIndex)
                             }
+
+                            heightEdit.setText(it.height.toString()) // Set height
+                            ageEdit.setText(it.age.toString())       // Set age
                         }
                     } else {
                         Toast.makeText(this, "User data not found.", Toast.LENGTH_SHORT).show()
                     }
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to load data: ${e.message}", Toast.LENGTH_LONG)
-                        .show()
+                    Toast.makeText(this, "Failed to load data: ${e.message}", Toast.LENGTH_LONG).show()
                 }
         }
     }
+
 
     private fun adjustWeight(delta: Int) {
         val currentWeight = weightValueTextView.text.toString().replace(" Pounds", "").toInt()
@@ -141,6 +148,8 @@ class AccountActivity : AppCompatActivity() {
         val weight = weightValueTextView.text.toString().replace(" Pounds", "").toInt()
         val days = daysValueTextView.text.toString().replace(" Days", "").toInt()
         val gender = genderSpinner.selectedItem.toString()
+        val height = heightEdit.text.toString().toIntOrNull() ?: 0
+        val age = ageEdit.text.toString().toIntOrNull() ?: 0
 
         val user = User(
             userId = userId,
@@ -149,9 +158,11 @@ class AccountActivity : AppCompatActivity() {
             weight = weight,
             days = days,
             gender = gender,
+            height = height,
+            age = age
         )
 
-        if(userId != null) {
+        if (userId != null) {
             db.collection("users").document(userId)
                 .set(user)
                 .addOnSuccessListener {
@@ -159,9 +170,9 @@ class AccountActivity : AppCompatActivity() {
                     finish()
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to save data: ${e.message}", Toast.LENGTH_LONG)
-                        .show()
+                    Toast.makeText(this, "Failed to save data: ${e.message}", Toast.LENGTH_LONG).show()
                 }
         }
     }
+
 }
