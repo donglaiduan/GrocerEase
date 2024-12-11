@@ -11,12 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Grocerease"
+        android:screenOrientation="sensorPortrait"
         tools:targetApi="31">
 
         <activity
             android:name=".LoginActivity"
             android:exported="true"
-            android:label="@string/login">
+            android:label="@string/login"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -25,7 +27,8 @@
         <activity
             android:name=".RegisterActivity"
             android:exported="true"
-            android:label="Register">
+            android:label="Register"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -35,12 +38,15 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".AccountActivity"></activity>
+        <activity android:name=".AccountActivity"
+            android:screenOrientation="sensorPortrait"
+            ></activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
