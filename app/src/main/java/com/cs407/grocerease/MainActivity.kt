@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.editProfile -> {
-                //Log.d("Profile","Profile Button Clicked")
                 val intent = Intent(this, AccountActivity::class.java)
                 startActivity(intent)
                 true
